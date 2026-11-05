@@ -24,10 +24,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1">วันที่</label>
-                    <!-- เปลี่ยนเป็น type="text" แต่ใส่ placeholder และกำหนดให้กดเปิดปฏิทินได้ -->
-                    <input type="text" id="docDateDisplay" class="w-full p-2 border rounded-lg bg-white cursor-pointer" placeholder="คลิกเลือกวันที่" readonly>
-                    <!-- ซ่อนค่าจริงสำหรับเก็บพิกัดวันที่ส่งเข้า PDF -->
-                    <input type="hidden" id="docDateRaw">
+                    <input type="date" id="docDate" class="w-full p-2 border rounded-lg">
                 </div>
             </div>
 
@@ -107,29 +104,11 @@
         </form>
     </div>
 
-    <!-- โหลด Datepicker สำเร็จรูปภาษาไทย (Flatpickr) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/th.js"></script>
-
     <script>
-        // เปิดใช้งานปฏิทินแบบแปลงเป็นรูปแบบไทย (เช่น 5 พ.ย. 2569) อัตโนมัติทันที
-        flatpickr("#docDateDisplay", {
-            locale: "th",
-            dateFormat: "j M Y", // รูปแบบ วัน เดือน (ย่อ) ปี พ.ศ.
-            defaultDate: "today",
-            onChange: function(selectedDates, dateStr, instance) {
-                // เก็บค่าดิบไว้ข้างหลังเผื่อใช้
-                document.getElementById('docDateRaw').value = dateStr;
-            }
-        });
-
-        // กำหนดค่าเริ่มต้นตอนเปิดเว็บครั้งแรก
-        document.addEventListener('DOMContentLoaded', () => {
-            const today = new Date();
-            const thaiMonths = ['', 'ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
-            const formatted = `${today.getDate()} ${thaiMonths[today.getMonth() + 1]} ${today.getFullYear() + 543}`;
-            document.getElementById('docDateDisplay').value = formatted;
+        // ตั้งค่าเริ่มต้นช่องวันที่ให้เป็นวันปัจจุบันอัตโนมัติ
+        window.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('docDate').value = today;
         });
 
         async function generatePDF() {
@@ -171,7 +150,21 @@
 
                 // ดึงค่าจากฟอร์ม
                 const docNo = document.getElementById('docNo').value;
-                const docDate = document.getElementById('docDateDisplay').value; // ดึงข้อความวันที่ไทยไปใส่ใน PDF ตรงๆ ได้เลย
+                
+                // แปลงวันที่จากปฏิทินเบราว์เซอร์ (YYYY-MM-DD เป็น ค.ศ.) ให้เป็นรูปแบบ พ.ศ. (เช่น 5 พ.ย. 2569)
+                const rawDate = document.getElementById('docDate').value;
+                let docDate = "";
+                if (rawDate) {
+                    const [year, month, day] = rawDate.split('-');
+                    const thaiMonths = [
+                        '', 'ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.',
+                        'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'
+                    ];
+                    const thaiYear = parseInt(year) + 543; // แปลง ค.ศ. เป็น พ.ศ.
+                    const thaiMonth = thaiMonths[parseInt(month)];
+                    const cleanDay = parseInt(day); // ตัดเลข 0 ข้างหน้าออก (เช่น 05 กลายเป็น 5)
+                    docDate = `${cleanDay} ${thaiMonth} ${thaiYear}`;
+                }
 
                 const cusName = document.getElementById('cusName').value;
                 const cusNo = document.getElementById('cusNo').value;
@@ -185,7 +178,7 @@
 
                 // พิกัดช่องต่างๆ
                 draw(docNo, 75, 661);       
-                draw(docDate, 430, 92);     // ช่องวันที่
+                draw(docDate, 430, 92);     // ช่องวันที่ (แสดงผลเป็น 5 พ.ย. 2569)
                 draw(cusName, 130, 172);
                 draw(address, 300, 172);
                 draw(moo, 450, 172);
