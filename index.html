@@ -23,7 +23,7 @@
                     <input type="text" id="docNo" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="เช่น 001/2569">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium mb-1">วันที่</label>
+                    <label class="block text-sm font-medium mb-1">วันที่รายงาน</label>
                     <input type="date" id="docDate" class="w-full p-2 border rounded-lg">
                 </div>
             </div>
@@ -72,10 +72,18 @@
 
             <div class="border-t pt-4">
                 <h3 class="font-semibold text-blue-600 mb-3">3. รายละเอียดความผิดปกติ</h3>
-                <div class="space-y-2 text-sm md:text-base">
-                    <label class="flex items-center space-x-2">
-                        <input type="radio" name="errorType" value="3.1" checked class="text-blue-600">
-                        <span>3.1 มิเตอร์ชำรุด (ต่อตรงเวลา: <input type="text" id="time31" class="border-b px-1 w-24 text-sm" placeholder="09:00"> น. วันที่ <input type="text" id="date31" class="border-b px-1 w-28 text-sm" placeholder="ว/ด/ป">)</span>
+                <div class="space-y-3 text-sm md:text-base">
+                    <label class="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-2">
+                        <div class="flex items-center space-x-2">
+                            <input type="radio" name="errorType" value="3.1" checked class="text-blue-600">
+                            <span>3.1 มิเตอร์ชำรุด (ต่อตรงเวลา:</span>
+                        </div>
+                        <div class="flex items-center space-x-2 pl-6 md:pl-0">
+                            <input type="text" id="time31" class="border-b px-1 w-24 text-sm" placeholder="09:00"> 
+                            <span>น. วันที่</span>
+                            <input type="date" id="date31" class="border p-1 rounded text-sm">
+                            <span>)</span>
+                        </div>
                     </label>
                     <label class="flex items-center space-x-2">
                         <input type="radio" name="errorType" value="3.2" class="text-blue-600">
@@ -109,6 +117,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('docDate').value = today;
+            document.getElementById('date31').value = today;
         });
 
         async function generatePDF() {
@@ -148,23 +157,23 @@
                     });
                 };
 
-                // ดึงค่าจากฟอร์ม
-                const docNo = document.getElementById('docNo').value;
-                
-                // แปลงวันที่จากปฏิทินเบราว์เซอร์ (YYYY-MM-DD เป็น ค.ศ.) ให้เป็นรูปแบบ พ.ศ. (เช่น 5 พ.ย. 2569)
-                const rawDate = document.getElementById('docDate').value;
-                let docDate = "";
-                if (rawDate) {
+                // ฟังก์ชันแปลงปี ค.ศ. เป็น พ.ศ. และรูปแบบไทย
+                const formatThaiDate = (rawDate) => {
+                    if (!rawDate) return "";
                     const [year, month, day] = rawDate.split('-');
                     const thaiMonths = [
                         '', 'ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.',
                         'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'
                     ];
-                    const thaiYear = parseInt(year) + 543; // แปลง ค.ศ. เป็น พ.ศ.
+                    const thaiYear = parseInt(year) + 543;
                     const thaiMonth = thaiMonths[parseInt(month)];
-                    const cleanDay = parseInt(day); // ตัดเลข 0 ข้างหน้าออก (เช่น 05 กลายเป็น 5)
-                    docDate = `${cleanDay} ${thaiMonth} ${thaiYear}`;
-                }
+                    const cleanDay = parseInt(day);
+                    return `${cleanDay} ${thaiMonth} ${thaiYear}`;
+                };
+
+                // ดึงค่าจากฟอร์ม
+                const docNo = document.getElementById('docNo').value;
+                const docDate = formatThaiDate(document.getElementById('docDate').value);
 
                 const cusName = document.getElementById('cusName').value;
                 const cusNo = document.getElementById('cusNo').value;
@@ -173,12 +182,17 @@
                 const phone = document.getElementById('phone').value;
                 const meterSize = document.getElementById('meterSize').value;
                 const peaNo = document.getElementById('peaNo').value;
+                
+                // ข้อมูลหัวข้อ 3.1
+                const time31 = document.getElementById('time31').value;
+                const date31 = formatThaiDate(document.getElementById('date31').value);
+
                 const location = document.getElementById('location').value;
                 const officerName = document.getElementById('officerName').value;
 
-                // พิกัดช่องต่างๆ
+                // พิกัดช่องต่างๆ (สามารถปรับแก้ตัวเลข Y ด้านหลังได้ตามตำแหน่งจริงบนแบบฟอร์ม)
                 draw(docNo, 75, 661);       
-                draw(docDate, 430, 92);     // ช่องวันที่ (แสดงผลเป็น 5 พ.ย. 2569)
+                draw(docDate, 430, 92);     // วันที่รายงาน
                 draw(cusName, 130, 172);
                 draw(address, 300, 172);
                 draw(moo, 450, 172);
@@ -186,6 +200,11 @@
                 draw(cusNo, 400, 197);
                 draw(meterSize, 120, 227);
                 draw(peaNo, 260, 227);
+
+                // พิกัดสำหรับหัวข้อ 3.1 (เวลา และ วันที่ชำรุด) - ปรับตัวเลขพิกัดตามหน้าฟอร์มจริงของคุณได้เลยครับ
+                draw(time31, 220, 275);     // เวลาต่อตรง 3.1
+                draw(date31, 350, 275);     // วันที่ต่อตรง 3.1
+
                 draw(location, 150, 332);
                 draw(officerName, 200, 452);
 
