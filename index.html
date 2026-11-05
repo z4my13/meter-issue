@@ -231,11 +231,20 @@
         let hasSignature = false;
 
         window.addEventListener('DOMContentLoaded', () => {
-    // 1. สั่งรีเซ็ตฟอร์มเพื่อเคลียร์ค่าที่เบราว์เซอร์จำไว้ทั้งหมด
+    // 1. สั่งรีเซ็ตฟอร์มทั้งหมดเพื่อล้างค่าที่เบราว์เซอร์จำไว้
             const form = document.getElementById('meterForm');
             if (form) form.reset();
-
-    // 2. เคลียร์ช่องข้อความอิสระ (Text inputs) ที่ฟอร์มรีเซ็ตไม่ครอบคลุม
+        
+            // 2. บังคับเคลียร์ช่องวันที่, เวลา และข้อความทั้งหมดให้ว่างเปล่า (ไม่ใส่ค่าดีฟอลต์อัตโนมัติ)
+            document.getElementById('docDate').value = '';
+            document.getElementById('date31').value = '';
+            document.getElementById('date32').value = '';
+            document.getElementById('date33').value = '';
+        
+            document.getElementById('time31').value = '';
+            document.getElementById('time32').value = '';
+            document.getElementById('time33').value = '';
+        
             document.getElementById('docNo').value = '';
             document.getElementById('cusName').value = '';
             document.getElementById('cusNo').value = '';
@@ -248,18 +257,11 @@
             document.getElementById('phase33').value = '';
             document.getElementById('location').value = '';
             document.getElementById('officerName').value = '';
-
-    // 3. กำหนดค่าเริ่มต้นเฉพาะวันที่และเวลาปัจจุบัน
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('docDate').value = today;
-            document.getElementById('date31').value = today;
-            document.getElementById('date32').value = today;
-            document.getElementById('date33').value = today;
         
-            const nowStr = new Date().toTimeString().slice(0, 5);
-            document.getElementById('time31').value = nowStr;
-            document.getElementById('time32').value = nowStr;
-            document.getElementById('time33').value = nowStr;
+            // 3. สำหรับช่องดร็อปดาวน์ (ถ้าต้องการให้เลือกค่าแรกสุด หรือปล่อยว่างไว้ให้ผู้ใช้กดเลือกเอง)
+            document.getElementById('reportRound').selectedIndex = 0; // เลือกตัวเลือกแรก (เช่น 1)
+            document.getElementById('subDistrict').selectedIndex = -1;  // ปล่อยให้ไม่เลือกตำบลใดๆ (ช่องจะว่างโล่ง)
+            document.getElementById('meterSize').selectedIndex = 0;     // เลือกขนาดมิเตอร์ตัวแรก
         });
 
         function getPos(e) {
