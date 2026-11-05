@@ -187,7 +187,8 @@
                 const fontSize = 16;
                 firstPage.drawText(text || '', {
                     x: x,
-                    y: pageHeight - topY,
+                    // ถ้าต้องการให้เลข topY คือระยะห่างจาก "ขอบบนลงมา" ตรงๆ โดยไม่ต้องลบเอง ให้ใช้แบบนี้ครับ:
+                    y: 792 - topY, 
                     size: fontSize,
                     font: customFont,
                     rgb: rgb(0, 0, 0)
