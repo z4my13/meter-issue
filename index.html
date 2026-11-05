@@ -385,12 +385,12 @@
             // วาดข้อมูลลง PDF (สามารถปรับเปลี่ยนพิกัด X, Y ตามแบบฟอร์มจริงของคุณได้เลยครับ)
             draw(docNo, 74, 661);        // เลขที่หนังสือ
             draw(docDate, 313, 661);      // ลงวันที่
-            draw(reportRound, 150, 640);  // รายงานครั้งที่ (ปรับพิกัดตามจริง)
+            draw(reportRound, 481, 516);  // รายงานครั้งที่ (ปรับพิกัดตามจริง)    
 
             draw(cusName, 177, 558);    // ชื่อ ผชฟ.
             draw(address, 343, 558);    // ที่อยู่
             draw(moo, 387, 558);        // หมู่
-            draw(subDistrict, 440, 558); // ตำบล (ปรับพิกัดตามจริง)
+            draw(subDistrict, 441, 558); // ตำบล (ปรับพิกัดตามจริง)
             
             draw(phone, 217, 537);      // เบอร์โทร
             draw(cusNo, 395, 537);      // CA หมายเลข ผชฟ
@@ -398,7 +398,7 @@
             draw(meterSize, 166, 516);  // ขนาดมิเตอร์
             draw(peaNo, 289, 516);      // PEA มิเตอร์
 
-            draw(anomalyReason, 200, 495); // มิเตอร์ผิดปกติเนื่องจาก (ปรับพิกัดตามจริง)
+            draw(anomalyReason, 214, 496); // มิเตอร์ผิดปกติเนื่องจาก 
 
             draw(time31, 317, 474);     // เวลาขณะมิเตอร์ชำรุด
             draw(date31, 433, 474);     // วันที่มิเตอร์ชำรุด
@@ -421,8 +421,8 @@
                 const sigImage = await pdfDoc.embedPng(sigImageBytes);
                 
                 firstPage.drawImage(sigImage, {
-                    x: 200,
-                    y: 340,
+                    x: 342,
+                    y: 350,
                     width: 120,
                     height: 36,
                 });
