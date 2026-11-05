@@ -183,12 +183,11 @@
             const firstPage = pdfDoc.getPages()[0];
             const pageHeight = firstPage.getHeight();
 
-            const draw = (text, x, topY) => {
+            const draw = (text, x, y) => {
                 const fontSize = 16;
                 firstPage.drawText(text || '', {
                     x: x,
-                    // ถ้าต้องการให้เลข topY คือระยะห่างจาก "ขอบบนลงมา" ตรงๆ โดยไม่ต้องลบเอง ให้ใช้แบบนี้ครับ:
-                    y: 792 - topY, 
+                    y: y, // เอาค่า y ที่ได้มาใส่ตรงๆ ได้เลย ไม่ต้องเอาไปลบกับ pageHeight แล้วครับ!
                     size: fontSize,
                     font: customFont,
                     rgb: rgb(0, 0, 0)
