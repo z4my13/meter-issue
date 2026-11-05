@@ -27,7 +27,7 @@
         <form id="meterForm" class="space-y-6">
             <!-- ส่วนที่ 1: ข้อมูลทั่วไป -->
             <div class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-xs font-medium text-zinc-600 mb-1.5">เลขที่เอกสาร</label>
                         <input type="text" id="docNo" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="เช่น 001/2569">
@@ -35,6 +35,16 @@
                     <div>
                         <label class="block text-xs font-medium text-zinc-600 mb-1.5">วันที่รายงาน</label>
                         <input type="date" id="docDate" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-zinc-600 mb-1.5">รายงานครั้งที่</label>
+                        <select id="reportRound" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -54,14 +64,34 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-2">
-                    <div class="col-span-2">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                    <div class="md:col-span-1">
                         <label class="block text-xs font-medium text-zinc-600 mb-1.5">ที่อยู่</label>
-                        <input type="text" id="address" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="บ้านเลขที่ / หมู่บ้าน">
+                        <input type="text" id="address" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="บ้านเลขที่">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-zinc-600 mb-1.5">หมู่ที่</label>
                         <input type="text" id="moo" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="เช่น 5">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-zinc-600 mb-1.5">ตำบล</label>
+                        <select id="subDistrict" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition">
+                            <option value="ทุ่งกระพังโหม">ทุ่งกระพังโหม</option>
+                            <option value="กระตีบ">กระตีบ</option>
+                            <option value="ทุ่งลูกนก">ทุ่งลูกนก</option>
+                            <option value="ห้วยขวาง">ห้วยขวาง</option>
+                            <option value="ทุ่งขวาง">ทุ่งขวาง</option>
+                            <option value="สระสี่มุม">สระสี่มุม</option>
+                            <option value="ทุ่งบัว">ทุ่งบัว</option>
+                            <option value="ดอนข่อย">ดอนข่อย</option>
+                            <option value="สระพัฒนา">สระพัฒนา</option>
+                            <option value="ห้วยหมอนทอง">ห้วยหมอนทอง</option>
+                            <option value="ห้วยม่วง">ห้วยม่วง</option>
+                            <option value="กำแพงแสน">กำแพงแสน</option>
+                            <option value="รางพิกุล">รางพิกุล</option>
+                            <option value="หนองกระทุ่ม">หนองกระทุ่ม</option>
+                            <option value="วังน้ำเขียว">วังน้ำเขียว</option>
+                        </select>
                     </div>
                 </div>
 
@@ -95,6 +125,11 @@
             <div class="border-t border-zinc-100 pt-5 space-y-4">
                 <h3 class="text-xs font-semibold tracking-wider text-zinc-400 uppercase">3. รายละเอียดความผิดปกติ</h3>
                 
+                <div>
+                    <label class="block text-xs font-medium text-zinc-600 mb-1.5">มิเตอร์ผิดปกติเนื่องจาก</label>
+                    <input type="text" id="anomalyReason" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="ระบุสาเหตุความผิดปกติ...">
+                </div>
+
                 <div class="space-y-3 text-sm">
                     <!-- 3.1 -->
                     <label class="flex flex-col md:flex-row md:items-center justify-between p-3 bg-zinc-50/40 border border-zinc-200/60 rounded-xl gap-2 cursor-pointer hover:border-zinc-300 transition">
@@ -319,14 +354,20 @@
 
             const docNo = document.getElementById('docNo').value;
             const docDate = formatThaiDate(document.getElementById('docDate').value);
+            const reportRound = document.getElementById('reportRound').value;
+            
             const cusName = document.getElementById('cusName').value;
             const cusNo = document.getElementById('cusNo').value;
             const address = document.getElementById('address').value;
             const moo = document.getElementById('moo').value;
+            const subDistrict = document.getElementById('subDistrict').value;
             const phone = document.getElementById('phone').value;
+            
             const meterSize = document.getElementById('meterSize').value;
             const peaNo = document.getElementById('peaNo').value;
             
+            const anomalyReason = document.getElementById('anomalyReason').value;
+
             const time31 = document.getElementById('time31').value;
             const date31 = formatThaiDate(document.getElementById('date31').value);
 
@@ -341,31 +382,38 @@
             const location = document.getElementById('location').value;
             const officerName = document.getElementById('officerName').value;
 
-            // พิกัดการวาง (สามารถจูนตัวเลข X, Y ต่อได้ตามเดิมครับ)
-            draw(docNo, 74, 661);       //เลขที่หนังสือ
-            draw(docDate, 313, 661);     //ลงวันที่
-            draw(cusName, 177, 558);    //ชื่อ ผชฟ.
-            draw(address, 343, 558);    //ที่อยู่
-            draw(moo, 387, 558);        //หมู่
-            draw(phone, 217, 537);       //เบอร์โทร
-            draw(cusNo, 395, 537);    //CAหมายเลข ผชฟ
-            draw(meterSize, 166, 516);     //ขนาดมิเตอร์
-            draw(peaNo, 289, 516);            //PEAมิเตอร์
+            // วาดข้อมูลลง PDF (สามารถปรับเปลี่ยนพิกัด X, Y ตามแบบฟอร์มจริงของคุณได้เลยครับ)
+            draw(docNo, 74, 661);        // เลขที่หนังสือ
+            draw(docDate, 313, 661);      // ลงวันที่
+            draw(reportRound, 150, 640);  // รายงานครั้งที่ (ปรับพิกัดตามจริง)
 
-            draw(time31, 317, 474);     //เวลาขณะมิเตอร์ชำรุด
-            draw(date31, 433, 474);     //วันที่มิเตอร์ชำรุด
+            draw(cusName, 177, 558);    // ชื่อ ผชฟ.
+            draw(address, 343, 558);    // ที่อยู่
+            draw(moo, 387, 558);        // หมู่
+            draw(subDistrict, 440, 558); // ตำบล (ปรับพิกัดตามจริง)
+            
+            draw(phone, 217, 537);      // เบอร์โทร
+            draw(cusNo, 395, 537);      // CA หมายเลข ผชฟ
+            
+            draw(meterSize, 166, 516);  // ขนาดมิเตอร์
+            draw(peaNo, 289, 516);      // PEA มิเตอร์
 
-            draw(phase32, 297, 454);    //VTชำรุดเฟส ????
-            draw(time32,  365, 454);    //เวลาขณะVTชำรุด
-            draw(date32,  449, 454);    //วันที่VTชำรุด
+            draw(anomalyReason, 200, 495); // มิเตอร์ผิดปกติเนื่องจาก (ปรับพิกัดตามจริง)
 
-            draw(phase33, 297, 433);    //CTชำรุดเฟส ????
-            draw(time33,  365, 433);    //เวลาขณะCTชำรุด
-            draw(date33,  449, 433);    //เวลาขณะCTชำรุด
+            draw(time31, 317, 474);     // เวลาขณะมิเตอร์ชำรุด
+            draw(date31, 433, 474);     // วันที่มิเตอร์ชำรุด
 
-            draw(location, 232, 412);    //ละ,ลอง ถ้ามี
-            draw(officerName, 172, 578); //ชื่อผู้รายงาน
-            draw(officerName, 337, 329); //ชื่อผู้อยู่เวร Ref.ชื่อผู้รายงาน
+            draw(phase32, 297, 454);    // VTชำรุดเฟส
+            draw(time32,  365, 454);    // เวลาขณะVTชำรุด
+            draw(date32,  449, 454);    // วันที่VTชำรุด
+
+            draw(phase33, 297, 433);    // CTชำรุดเฟส
+            draw(time33,  365, 433);    // เวลาขณะCTชำรุด
+            draw(date33,  449, 433);    // วันที่CTชำรุด
+
+            draw(location, 232, 412);   // ละ,ลอง ถ้ามี
+            draw(officerName, 172, 578); // ชื่อผู้รายงาน
+            draw(officerName, 337, 329); // ชื่อผู้อยู่เวร Ref.ชื่อผู้รายงาน
 
             if (hasSignature) {
                 const sigDataUrl = sigCanvas.toDataURL('image/png');
