@@ -231,31 +231,35 @@
         let hasSignature = false;
 
         window.addEventListener('DOMContentLoaded', () => {
+    // 1. สั่งรีเซ็ตฟอร์มเพื่อเคลียร์ค่าที่เบราว์เซอร์จำไว้ทั้งหมด
+            const form = document.getElementById('meterForm');
+            if (form) form.reset();
+
+    // 2. เคลียร์ช่องข้อความอิสระ (Text inputs) ที่ฟอร์มรีเซ็ตไม่ครอบคลุม
+            document.getElementById('docNo').value = '';
+            document.getElementById('cusName').value = '';
+            document.getElementById('cusNo').value = '';
+            document.getElementById('address').value = '';
+            document.getElementById('moo').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('peaNo').value = '';
+            document.getElementById('anomalyReason').value = '';
+            document.getElementById('phase32').value = '';
+            document.getElementById('phase33').value = '';
+            document.getElementById('location').value = '';
+            document.getElementById('officerName').value = '';
+
+    // 3. กำหนดค่าเริ่มต้นเฉพาะวันที่และเวลาปัจจุบัน
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('docDate').value = today;
             document.getElementById('date31').value = today;
             document.getElementById('date32').value = today;
             document.getElementById('date33').value = today;
-
+        
             const nowStr = new Date().toTimeString().slice(0, 5);
             document.getElementById('time31').value = nowStr;
             document.getElementById('time32').value = nowStr;
             document.getElementById('time33').value = nowStr;
-
-            sigCanvas = document.getElementById('sigCanvas');
-            sigCtx = sigCanvas.getContext('2d');
-            sigCtx.lineWidth = 2;
-            sigCtx.lineCap = 'round';
-            sigCtx.strokeStyle = '#18181b';
-
-            sigCanvas.addEventListener('mousedown', startDrawing);
-            sigCanvas.addEventListener('mousemove', drawLine);
-            sigCanvas.addEventListener('mouseup', stopDrawing);
-            sigCanvas.addEventListener('mouseleave', stopDrawing);
-
-            sigCanvas.addEventListener('touchstart', startDrawingTouch);
-            sigCanvas.addEventListener('touchmove', drawLineTouch);
-            sigCanvas.addEventListener('touchend', stopDrawing);
         });
 
         function getPos(e) {
