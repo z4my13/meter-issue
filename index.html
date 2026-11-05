@@ -343,7 +343,7 @@
 
             // พิกัดการวาง (สามารถจูนตัวเลข X, Y ต่อได้ตามเดิมครับ)
             draw(docNo, 74, 661);       
-            draw(docDate, 430, 700);     
+            draw(docDate, 313, 661);     
             draw(cusName, 130, 620);
             draw(address, 300, 620);
             draw(moo, 450, 620);
@@ -364,7 +364,8 @@
             draw(date33,  390, 445);
 
             draw(location, 150, 400);
-            draw(officerName, 200, 340);
+            draw(officerName, 200, 340); //ชื่อผู้รายงาน
+            draw(officerName, 200, 340); //ชื่อผู้อยู่เวร Ref.ชื่อผู้รายงาน
 
             if (hasSignature) {
                 const sigDataUrl = sigCanvas.toDataURL('image/png');
