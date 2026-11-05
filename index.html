@@ -30,15 +30,16 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-xs font-medium text-zinc-600 mb-1.5">เลขที่เอกสาร</label>
-                        <input type="text" id="docNo" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="เช่น 001/2569">
+                        <input type="text" id="docNo" autocomplete="off" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="เช่น 001/2569">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-zinc-600 mb-1.5">วันที่รายงาน</label>
-                        <input type="date" id="docDate" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition">
+                        <input type="date" id="docDate" autocomplete="off" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-zinc-600 mb-1.5">รายงานครั้งที่</label>
-                        <select id="reportRound" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition">
+                        <select id="reportRound" autocomplete="off" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition">
+                            <option value="">-- เลือกครั้งที่ --</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -56,26 +57,27 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-medium text-zinc-600 mb-1.5">ชื่อผู้ใช้ไฟฟ้า</label>
-                        <input type="text" id="cusName" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="นายสมชาย ใจดี">
+                        <input type="text" id="cusName" autocomplete="off" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="นายสมชาย ใจดี">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-zinc-600 mb-1.5">หมายเลขผู้ใช้ไฟ (Consumer No.)</label>
-                        <input type="text" id="cusNo" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="0200xxxxxx">
+                        <input type="text" id="cusNo" autocomplete="off" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="0200xxxxxx">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
                     <div class="md:col-span-1">
                         <label class="block text-xs font-medium text-zinc-600 mb-1.5">ที่อยู่</label>
-                        <input type="text" id="address" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="บ้านเลขที่">
+                        <input type="text" id="address" autocomplete="off" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="บ้านเลขที่">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-zinc-600 mb-1.5">หมู่ที่</label>
-                        <input type="text" id="moo" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="เช่น 5">
+                        <input type="text" id="moo" autocomplete="off" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="เช่น 5">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-zinc-600 mb-1.5">ตำบล</label>
-                        <select id="subDistrict" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition">
+                        <select id="subDistrict" autocomplete="off" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition">
+                            <option value="">-- เลือกตำบล --</option>
                             <option value="ทุ่งกระพังโหม">ทุ่งกระพังโหม</option>
                             <option value="กระตีบ">กระตีบ</option>
                             <option value="ทุ่งลูกนก">ทุ่งลูกนก</option>
@@ -97,7 +99,7 @@
 
                 <div>
                     <label class="block text-xs font-medium text-zinc-600 mb-1.5">เบอร์โทรศัพท์</label>
-                    <input type="text" id="phone" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="08x-xxx-xxxx">
+                    <input type="text" id="phone" autocomplete="off" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="08x-xxx-xxxx">
                 </div>
             </div>
 
@@ -108,7 +110,8 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-medium text-zinc-600 mb-1.5">ขนาดมิเตอร์</label>
-                        <select id="meterSize" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition">
+                        <select id="meterSize" autocomplete="off" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition">
+                            <option value="">-- เลือกขนาดมิเตอร์ --</option>
                             <option value="5(15)">5(15)</option>
                             <option value="5(45)">5(45)</option>
                             <option value="5(100)">5(100)</option>
@@ -116,7 +119,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-zinc-600 mb-1.5">PEA (หมายเลขซีเรียลมิเตอร์)</label>
-                        <input type="text" id="peaNo" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="หมายเลข PEA">
+                        <input type="text" id="peaNo" autocomplete="off" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="หมายเลข PEA">
                     </div>
                 </div>
             </div>
@@ -127,7 +130,7 @@
                 
                 <div>
                     <label class="block text-xs font-medium text-zinc-600 mb-1.5">มิเตอร์ผิดปกติเนื่องจาก</label>
-                    <input type="text" id="anomalyReason" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="ระบุสาเหตุความผิดปกติ...">
+                    <input type="text" id="anomalyReason" autocomplete="off" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="ระบุสาเหตุความผิดปกติ...">
                 </div>
 
                 <div class="space-y-3 text-sm">
@@ -138,9 +141,9 @@
                             <span class="text-xs font-medium text-zinc-700">3.1 มิเตอร์ชำรุด (ต่อตรงเวลา)</span>
                         </div>
                         <div class="flex items-center space-x-1.5 text-xs">
-                            <input type="time" id="time31" class="border border-zinc-200 bg-white px-2 py-1 rounded">
+                            <input type="time" id="time31" autocomplete="off" class="border border-zinc-200 bg-white px-2 py-1 rounded">
                             <span class="text-zinc-400">น.</span>
-                            <input type="date" id="date31" class="border border-zinc-200 bg-white px-2 py-1 rounded">
+                            <input type="date" id="date31" autocomplete="off" class="border border-zinc-200 bg-white px-2 py-1 rounded">
                         </div>
                     </label>
 
@@ -149,12 +152,12 @@
                         <div class="flex items-center space-x-2.5">
                             <input type="radio" name="errorType" value="3.2" class="accent-zinc-900">
                             <span class="text-xs font-medium text-zinc-700">3.2 VT ชำรุด เฟส</span>
-                            <input type="text" id="phase32" class="border-b border-zinc-300 bg-transparent px-1 w-8 text-center text-xs font-medium focus:outline-none">
+                            <input type="text" id="phase32" autocomplete="off" class="border-b border-zinc-300 bg-transparent px-1 w-8 text-center text-xs font-medium focus:outline-none">
                         </div>
                         <div class="flex items-center space-x-1.5 text-xs">
-                            <input type="time" id="time32" class="border border-zinc-200 bg-white px-2 py-1 rounded">
+                            <input type="time" id="time32" autocomplete="off" class="border border-zinc-200 bg-white px-2 py-1 rounded">
                             <span class="text-zinc-400">น.</span>
-                            <input type="date" id="date32" class="border border-zinc-200 bg-white px-2 py-1 rounded">
+                            <input type="date" id="date32" autocomplete="off" class="border border-zinc-200 bg-white px-2 py-1 rounded">
                         </div>
                     </label>
 
@@ -163,12 +166,12 @@
                         <div class="flex items-center space-x-2.5">
                             <input type="radio" name="errorType" value="3.3" class="accent-zinc-900">
                             <span class="text-xs font-medium text-zinc-700">3.3 CT ชำรุด เฟส</span>
-                            <input type="text" id="phase33" class="border-b border-zinc-300 bg-transparent px-1 w-8 text-center text-xs font-medium focus:outline-none">
+                            <input type="text" id="phase33" autocomplete="off" class="border-b border-zinc-300 bg-transparent px-1 w-8 text-center text-xs font-medium focus:outline-none">
                         </div>
                         <div class="flex items-center space-x-1.5 text-xs">
-                            <input type="time" id="time33" class="border border-zinc-200 bg-white px-2 py-1 rounded">
+                            <input type="time" id="time33" autocomplete="off" class="border border-zinc-200 bg-white px-2 py-1 rounded">
                             <span class="text-zinc-400">น.</span>
-                            <input type="date" id="date33" class="border border-zinc-200 bg-white px-2 py-1 rounded">
+                            <input type="date" id="date33" autocomplete="off" class="border border-zinc-200 bg-white px-2 py-1 rounded">
                         </div>
                     </label>
                 </div>
@@ -178,12 +181,12 @@
             <div class="border-t border-zinc-100 pt-5 space-y-4">
                 <div>
                     <label class="block text-xs font-medium text-zinc-600 mb-1.5">4. สถานที่ / บริเวณใกล้เคียง</label>
-                    <input type="text" id="location" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="จุดสังเกต / สถานใกล้เคียง">
+                    <input type="text" id="location" autocomplete="off" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="จุดสังเกต / สถานใกล้เคียง">
                 </div>
 
                 <div>
                     <label class="block text-xs font-medium text-zinc-600 mb-1.5">ชื่อพนักงานผู้รายงาน (พชง.)</label>
-                    <input type="text" id="officerName" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="ชื่อ-นามสกุล พชง.">
+                    <input type="text" id="officerName" autocomplete="off" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="ชื่อ-นามสกุล พชง.">
                 </div>
 
                 <!-- ลายเซ็น -->
@@ -230,38 +233,45 @@
         let sigCanvas, sigCtx;
         let hasSignature = false;
 
-        window.addEventListener('DOMContentLoaded', () => {
-    // 1. สั่งรีเซ็ตฟอร์มทั้งหมดเพื่อล้างค่าที่เบราว์เซอร์จำไว้
+        // ฟังก์ชันบังคับล้างค่าฟอร์มเกลี้ยง
+        function forceClearForm() {
             const form = document.getElementById('meterForm');
             if (form) form.reset();
-        
-            // 2. บังคับเคลียร์ช่องวันที่, เวลา และข้อความทั้งหมดให้ว่างเปล่า (ไม่ใส่ค่าดีฟอลต์อัตโนมัติ)
-            document.getElementById('docDate').value = '';
-            document.getElementById('date31').value = '';
-            document.getElementById('date32').value = '';
-            document.getElementById('date33').value = '';
-        
-            document.getElementById('time31').value = '';
-            document.getElementById('time32').value = '';
-            document.getElementById('time33').value = '';
-        
-            document.getElementById('docNo').value = '';
-            document.getElementById('cusName').value = '';
-            document.getElementById('cusNo').value = '';
-            document.getElementById('address').value = '';
-            document.getElementById('moo').value = '';
-            document.getElementById('phone').value = '';
-            document.getElementById('peaNo').value = '';
-            document.getElementById('anomalyReason').value = '';
-            document.getElementById('phase32').value = '';
-            document.getElementById('phase33').value = '';
-            document.getElementById('location').value = '';
-            document.getElementById('officerName').value = '';
-        
-            // 3. สำหรับช่องดร็อปดาวน์ (ถ้าต้องการให้เลือกค่าแรกสุด หรือปล่อยว่างไว้ให้ผู้ใช้กดเลือกเอง)
-            document.getElementById('reportRound').selectedIndex = 0; // เลือกตัวเลือกแรก (เช่น 1)
-            document.getElementById('subDistrict').selectedIndex = -1;  // ปล่อยให้ไม่เลือกตำบลใดๆ (ช่องจะว่างโล่ง)
-            document.getElementById('meterSize').selectedIndex = 0;     // เลือกขนาดมิเตอร์ตัวแรก
+
+            const inputs = form.querySelectorAll('input[type="text"], input[type="date"], input[type="time"]');
+            inputs.forEach(input => input.value = '');
+
+            document.getElementById('reportRound').value = '';
+            document.getElementById('subDistrict').value = '';
+            document.getElementById('meterSize').value = '';
+            
+            clearSignature();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // บังคับล้างค่าทันที และล้างซ้ำอีกทีหลังเบราว์เซอร์ทำ Autofill เสร็จ (100ms)
+            forceClearForm();
+            setTimeout(forceClearForm, 100);
+
+            sigCanvas = document.getElementById('sigCanvas');
+            sigCtx = sigCanvas.getContext('2d');
+            sigCtx.lineWidth = 2;
+            sigCtx.lineCap = 'round';
+            sigCtx.strokeStyle = '#18181b';
+
+            sigCanvas.addEventListener('mousedown', startDrawing);
+            sigCanvas.addEventListener('mousemove', drawLine);
+            sigCanvas.addEventListener('mouseup', stopDrawing);
+            sigCanvas.addEventListener('mouseleave', stopDrawing);
+
+            sigCanvas.addEventListener('touchstart', startDrawingTouch);
+            sigCanvas.addEventListener('touchmove', drawLineTouch);
+            sigCanvas.addEventListener('touchend', stopDrawing);
+        });
+
+        // ป้องกัน BFCache บังคับเคลียร์ค่าเมื่อกดปุ่ม Back/Forward
+        window.addEventListener('pageshow', (event) => {
+            forceClearForm();
         });
 
         function getPos(e) {
@@ -308,7 +318,9 @@
         }
 
         function clearSignature() {
-            sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+            if (sigCtx && sigCanvas) {
+                sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+            }
             hasSignature = false;
         }
 
@@ -388,15 +400,15 @@
             const location = document.getElementById('location').value;
             const officerName = document.getElementById('officerName').value;
 
-            // วาดข้อมูลลง PDF (สามารถปรับเปลี่ยนพิกัด X, Y ตามแบบฟอร์มจริงของคุณได้เลยครับ)
+            // วาดข้อมูลลง PDF
             draw(docNo, 74, 661);        // เลขที่หนังสือ
             draw(docDate, 313, 661);      // ลงวันที่
-            draw(reportRound, 481, 516);  // รายงานครั้งที่ (ปรับพิกัดตามจริง)    
+            draw(reportRound, 481, 516);  // รายงานครั้งที่   
 
             draw(cusName, 177, 558);    // ชื่อ ผชฟ.
             draw(address, 343, 558);    // ที่อยู่
             draw(moo, 387, 558);        // หมู่
-            draw(subDistrict, 441, 558); // ตำบล (ปรับพิกัดตามจริง)
+            draw(subDistrict, 441, 558); // ตำบล
             
             draw(phone, 217, 537);      // เบอร์โทร
             draw(cusNo, 395, 537);      // CA หมายเลข ผชฟ
