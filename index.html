@@ -13,7 +13,7 @@
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans p-4 md:p-8">
     <div class="max-w-3xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-md">
-        <h1 class="text-2xl font-bold text-blue-700 mb-2">⚡ใบรายงานมิเตอร์ผิดปกติ</h1>
+        <h1 class="text-2xl font-bold text-blue-700 mb-2">⚡ ใบรายงานมิเตอร์ผิดปกติ</h1>
         <p class="text-sm text-slate-500 mb-6">การไฟฟ้าส่วนภูมิภาค (กฟส.กำแพงแสน) - กรอกข้อมูลแล้วกดพรีวิวหรือดาวน์โหลด</p>
 
         <form id="meterForm" class="space-y-4">
@@ -61,7 +61,11 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium mb-1">ขนาดมิเตอร์</label>
-                        <input type="text" id="meterSize" class="w-full p-2 border rounded-lg" placeholder="เช่น 5(15) หรือ 15(45)">
+                        <select id="meterSize" class="w-full p-2 border rounded-lg bg-white">
+                            <option value="5(15)">5(15)</option>
+                            <option value="5(45)">5(45)</option>
+                            <option value="5(100)">5(100)</option>
+                        </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-1">PEA (หมายเลขซีเรียลมิเตอร์)</label>
@@ -124,9 +128,22 @@
                 <input type="text" id="location" class="w-full p-2 border rounded-lg" placeholder="จุดสังเกต / สถานใกล้เคียง">
             </div>
 
-            <div class="border-t pt-4">
-                <label class="block text-sm font-medium mb-1">ชื่อพนักงานผู้รายงาน (พชง.)</label>
+            <div class="border-t pt-4 space-y-3">
+                <label class="block text-sm font-medium">ชื่อพนักงานผู้รายงาน (พชง.)</label>
                 <input type="text" id="officerName" class="w-full p-2 border rounded-lg" placeholder="ชื่อ-นามสกุล พชง.">
+
+                <!-- ลายเซ็น -->
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="block text-sm font-medium text-slate-700">ลายเซ็นพนักงาน (วาดด้วยมือ/เมาส์)</label>
+                        <button type="button" onclick="clearSignature()" class="text-xs text-red-600 hover:text-red-800 font-semibold cursor-pointer">
+                            🗑️ ล้างลายเซ็น
+                        </button>
+                    </div>
+                    <div class="border-2 border-dashed border-slate-300 rounded-lg overflow-hidden bg-slate-50 touch-none">
+                        <canvas id="sigCanvas" width="500" height="150" class="w-full h-36 cursor-crosshair block"></canvas>
+                    </div>
+                </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
@@ -153,6 +170,10 @@
     </div>
 
     <script>
+        let isDrawing = false;
+        let sigCanvas, sigCtx;
+        let hasSignature = false;
+
         window.addEventListener('DOMContentLoaded', () => {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('docDate').value = today;
@@ -164,7 +185,72 @@
             document.getElementById('time31').value = nowStr;
             document.getElementById('time32').value = nowStr;
             document.getElementById('time33').value = nowStr;
+
+            // ระบบวาดลายเซ็น (Canvas)
+            sigCanvas = document.getElementById('sigCanvas');
+            sigCtx = sigCanvas.getContext('2d');
+            sigCtx.lineWidth = 2.5;
+            sigCtx.lineCap = 'round';
+            sigCtx.strokeStyle = '#000000';
+
+            // Event Listeners สำหรับเมาส์และ Touch หน้าจอ
+            sigCanvas.addEventListener('mousedown', startDrawing);
+            sigCanvas.addEventListener('mousemove', drawLine);
+            sigCanvas.addEventListener('mouseup', stopDrawing);
+            sigCanvas.addEventListener('mouseleave', stopDrawing);
+
+            sigCanvas.addEventListener('touchstart', startDrawingTouch);
+            sigCanvas.addEventListener('touchmove', drawLineTouch);
+            sigCanvas.addEventListener('touchend', stopDrawing);
         });
+
+        function getPos(e) {
+            const rect = sigCanvas.getBoundingClientRect();
+            const scaleX = sigCanvas.width / rect.width;
+            const scaleY = sigCanvas.height / rect.height;
+            return {
+                x: (e.clientX - rect.left) * scaleX,
+                y: (e.clientY - rect.top) * scaleY
+            };
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            hasSignature = true;
+            const pos = getPos(e);
+            sigCtx.beginPath();
+            sigCtx.moveTo(pos.x, pos.y);
+        }
+
+        function drawLine(e) {
+            if (!isDrawing) return;
+            const pos = getPos(e);
+            sigCtx.lineTo(pos.x, pos.y);
+            sigCtx.stroke();
+        }
+
+        function startDrawingTouch(e) {
+            if (e.touches.length === 1) {
+                e.preventDefault();
+                startDrawing(e.touches[0]);
+            }
+        }
+
+        function drawLineTouch(e) {
+            if (e.touches.length === 1) {
+                e.preventDefault();
+                drawLine(e.touches[0]);
+            }
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function clearSignature() {
+            sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+            hasSignature = false;
+        }
 
         async function createPDFDocument() {
             const { PDFDocument, rgb } = PDFLib;
@@ -190,7 +276,6 @@
 
             const firstPage = pdfDoc.getPages()[0];
 
-            // ใช้ฟังก์ชัน draw ที่รับค่า y ตรงๆ ตามที่คุณเซ็ตไว้ได้เลย
             const draw = (text, x, y) => {
                 const fontSize = 16;
                 firstPage.drawText(text || '', {
@@ -226,16 +311,13 @@
             const meterSize = document.getElementById('meterSize').value;
             const peaNo = document.getElementById('peaNo').value;
             
-            // ข้อมูล 3.1
             const time31 = document.getElementById('time31').value;
             const date31 = formatThaiDate(document.getElementById('date31').value);
 
-            // ข้อมูล 3.2
             const phase32 = document.getElementById('phase32').value;
             const time32 = document.getElementById('time32').value;
             const date32 = formatThaiDate(document.getElementById('date32').value);
 
-            // ข้อมูล 3.3
             const phase33 = document.getElementById('phase33').value;
             const time33 = document.getElementById('time33').value;
             const date33 = formatThaiDate(document.getElementById('date33').value);
@@ -243,9 +325,9 @@
             const location = document.getElementById('location').value;
             const officerName = document.getElementById('officerName').value;
 
-            // วาดข้อมูลลง PDF (ปรับแก้พิกัด X, Y ตามฟอร์มจริงได้เลยครับ)
+            // วาดข้อมูลลง PDF
             draw(docNo, 74, 661);       
-            draw(docDate, 430, 700);     // วันที่รายงาน
+            draw(docDate, 430, 700);     
             draw(cusName, 130, 620);
             draw(address, 300, 620);
             draw(moo, 450, 620);
@@ -254,22 +336,34 @@
             draw(meterSize, 120, 565);
             draw(peaNo, 260, 565);
 
-            // พิกัด 3.1
             draw(time31, 220, 517);     
             draw(date31, 350, 517);     
 
-            // พิกัด 3.2 (สามารถปรับตัวเลข X, Y ด้านหลังได้ตามตำแหน่งจริงบนแบบฟอร์ม)
             draw(phase32, 180, 480);
             draw(time32,  260, 480);
             draw(date32,  390, 480);
 
-            // พิกัด 3.3 (สามารถปรับตัวเลข X, Y ด้านหลังได้ตามตำแหน่งจริงบนแบบฟอร์ม)
             draw(phase33, 180, 445);
             draw(time33,  260, 445);
             draw(date33,  390, 445);
 
             draw(location, 150, 400);
             draw(officerName, 200, 340);
+
+            // ฝังลายเซ็นลงใน PDF (หากมีการวาด)
+            if (hasSignature) {
+                const sigDataUrl = sigCanvas.toDataURL('image/png');
+                const sigImageBytes = await fetch(sigDataUrl).then(res => res.arrayBuffer());
+                const sigImage = await pdfDoc.embedPng(sigImageBytes);
+                
+                // สามารถปรับตำแหน่ง x, y และขนาด width, height ของลายเซ็นตรงนี้ได้ตามต้องการครับ
+                firstPage.drawImage(sigImage, {
+                    x: 200,
+                    y: 340,
+                    width: 120,
+                    height: 36,
+                });
+            }
 
             return await pdfDoc.save();
         }
