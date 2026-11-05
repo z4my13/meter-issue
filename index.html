@@ -24,7 +24,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1">วันที่</label>
-                    <input type="text" id="docDate" class="w-full p-2 border rounded-lg" value="ว/ด/ป">
+                    <input type="date" id="docDate" class="w-full p-2 border rounded-lg">
                 </div>
             </div>
 
@@ -105,21 +105,24 @@
     </div>
 
     <script>
+        // กำหนดให้ช่องวันที่แสดงวันที่ปัจจุบันเป็นค่าเริ่มต้น (ตั้งต้นเป็น พ.ศ./ค.ศ. ของปฏิทินระบบ)
+        window.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('docDate').value = today;
+        });
+
         async function generatePDF() {
             const { PDFDocument, rgb } = PDFLib;
 
             try {
-                // หาพาทสัมบูรณ์ (Base URL) บน GitHub Pages ป้องกัน 404
                 const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '');
 
-                // 1. โหลดไฟล์ THSarabun.ttf จาก GitHub ด้วยพาทเต็ม
                 const fontUrl = baseUrl + '/THSarabun.ttf';
                 const fontBytes = await fetch(fontUrl).then(res => {
                     if (!res.ok) throw new Error("ไม่พบไฟล์ฟอนต์ THSarabun.ttf ใน GitHub");
                     return res.arrayBuffer();
                 });
 
-                // 2. โหลดไฟล์ template.pdf จาก GitHub
                 const pdfUrl = baseUrl + '/template.pdf';
                 const existingPdfBytes = await fetch(pdfUrl).then(res => {
                     if (!res.ok) throw new Error("ไม่พบไฟล์ template.pdf ใน GitHub");
@@ -128,14 +131,12 @@
 
                 const pdfDoc = await PDFDocument.load(existingPdfBytes);
                 
-                // 3. ฝังฟอนต์ภาษาไทย
                 pdfDoc.registerFontkit(fontkit);
                 const customFont = await pdfDoc.embedFont(fontBytes);
 
                 const firstPage = pdfDoc.getPages()[0];
-                const pageHeight = firstPage.getHeight(); // คำนวณความสูงกระดาษจริงอัตโนมัติ
+                const pageHeight = firstPage.getHeight();
 
-                // ฟังก์ชันช่วยแปลงค่า Y จากระบบ "บนลงล่าง" ให้เป็นระบบ "ล่างขึ้นบน" ของ pdf-lib
                 const draw = (text, x, topY) => {
                     const fontSize = 16;
                     firstPage.drawText(text || '', {
@@ -149,7 +150,22 @@
 
                 // ดึงค่าจากฟอร์ม
                 const docNo = document.getElementById('docNo').value;
-                const docDate = document.getElementById('docDate').value;
+                
+                // แปลงวันที่จากปฏิทิน (YYYY-MM-DD) เป็นรูปแบบไทย (เช่น 5 พ.ย. 2569)
+                const rawDate = document.getElementById('docDate').value;
+                let docDate = "";
+                if (rawDate) {
+                    const [year, month, day] = rawDate.split('-');
+                    const thaiMonths = [
+                        '', 'ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.',
+                        'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'
+                    ];
+                    const thaiYear = parseInt(year) + 543;
+                    const thaiMonth = thaiMonths[parseInt(month)];
+                    const cleanDay = parseInt(day); // ตัดเลข 0 ข้างหน้าออก (เช่น 05 -> 5)
+                    docDate = `${cleanDay} ${thaiMonth} ${thaiYear}`;
+                }
+
                 const cusName = document.getElementById('cusName').value;
                 const cusNo = document.getElementById('cusNo').value;
                 const address = document.getElementById('address').value;
@@ -160,9 +176,9 @@
                 const location = document.getElementById('location').value;
                 const officerName = document.getElementById('officerName').value;
 
-                // พิกัดแบบ Top-Left (ใส่ค่า X, Y จากเว็บส่องพิกัดได้เลย โค้ดจะลบความสูงให้อัตโนมัติ)
-                draw(docNo, 75, 661);       // ใช้ค่า x=75, y=661 จากที่คุณวัดได้ทันที
-                draw(docDate, 430, 92);
+                // พิกัดช่องต่างๆ
+                draw(docNo, 75, 661);       
+                draw(docDate, 430, 92);     // ช่องวันที่
                 draw(cusName, 130, 172);
                 draw(address, 300, 172);
                 draw(moo, 450, 172);
@@ -173,7 +189,6 @@
                 draw(location, 150, 332);
                 draw(officerName, 200, 452);
 
-                // สร้างและดาวน์โหลด PDF
                 const pdfBytes = await pdfDoc.save();
                 const blob = new Blob([pdfBytes], { type: 'application/pdf' });
                 const link = document.createElement('a');
