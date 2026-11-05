@@ -104,59 +104,64 @@
     </div>
 
     <script>
-        async function generatePDF() {
-            const { PDFDocument, rgb } = PDFLib;
+    async function generatePDF() {
+        const { PDFDocument, rgb } = PDFLib;
 
-            // โหลดไฟล์ PDF ต้นฉบับ (วางไฟล์ชื่อ template.pdf ไว้ในโฟลเดอร์เดียวกันบน GitHub)
-            try {
-                const existingPdfBytes = await fetch('template.pdf').then(res => res.arrayBuffer());
-                const pdfDoc = await PDFDocument.load(existingPdfBytes);
-                const pages = pdfDoc.getPages();
-                const firstPage = pages[0];
+        try {
+            // 1. วางรหัส Base64 ของไฟล์ PDF คุณตรงนี้ (แทนที่ตัวอย่างสั้นๆ นี้)
+            const base64PdfData = "JVBERi0xLjQKJcTl8uXtrS..."; // <-- เอาโค้ด Base64 ยาวๆ มาวางแทนที่ตรงนี้
 
-                // ดึงค่าจากฟอร์มหน้าเว็บมาใส่ตัวแปร
-                const docNo = document.getElementById('docNo').value;
-                const docDate = document.getElementById('docDate').value;
-                const cusName = document.getElementById('cusName').value;
-                const cusNo = document.getElementById('cusNo').value;
-                const address = document.getElementById('address').value;
-                const moo = document.getElementById('moo').value;
-                const phone = document.getElementById('phone').value;
-                const meterSize = document.getElementById('meterSize').value;
-                const peaNo = document.getElementById('peaNo').value;
-                const location = document.getElementById('location').value;
-                const officerName = document.getElementById('officerName').value;
-
-                // พิกัด X, Y (หน่วยเป็นพอยต์ วัดจากมุมล่างซ้ายของกระดาษ) 
-                // *หมายเหตุ: ตัวเลขพิกัดด้านล่างนี้เป็นค่าตัวอย่าง ต้องเอาไปปรับจูนให้ตรงกับช่องใน template.pdf จริงอีกครั้งครับ*
-                firstPage.drawText(docNo, { x: 450, y: 730, size: 10, rgb: rgb(0, 0, 0) });
-                firstPage.drawText(docDate, { x: 430, y: 700, size: 10, rgb: rgb(0, 0, 0) });
-                
-                firstPage.drawText(cusName, { x: 130, y: 620, size: 10, rgb: rgb(0, 0, 0) });
-                firstPage.drawText(address, { x: 300, y: 620, size: 10, rgb: rgb(0, 0, 0) });
-                firstPage.drawText(moo, { x: 450, y: 620, size: 10, rgb: rgb(0, 0, 0) });
-                firstPage.drawText(phone, { x: 130, y: 595, size: 10, rgb: rgb(0, 0, 0) });
-                firstPage.drawText(cusNo, { x: 400, y: 595, size: 10, rgb: rgb(0, 0, 0) });
-
-                firstPage.drawText(meterSize, { x: 120, y: 565, size: 10, rgb: rgb(0, 0, 0) });
-                firstPage.drawText(peaNo, { x: 260, y: 565, size: 10, rgb: rgb(0, 0, 0) });
-
-                firstPage.drawText(location, { x: 150, y: 460, size: 10, rgb: rgb(0, 0, 0) });
-                firstPage.drawText(officerName, { x: 200, y: 340, size: 10, rgb: rgb(0, 0, 0) });
-
-                // เซฟไฟล์และดาวน์โหลดอัตโนมัติ
-                const pdfBytes = await pdfDoc.save();
-                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = 'รายงานมิเตอร์ผิดปกติ-พิมพ์แล้ว.pdf';
-                link.click();
-
-            } catch (error) {
-                alert("ไม่พบไฟล์ template.pdf กรุณาอัปโหลดไฟล์ต้นฉบับตั้งชื่อว่า template.pdf ไว้ใน GitHub โฟลเดอร์เดียวกันครับ");
-                console.error(error);
+            // 2. แปลง Base64 ให้เป็นหน่วยความจำที่ PDF-Lib อ่านได้
+            const binaryString = atob(base64PdfData);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
             }
+
+            // 3. โหลดไฟล์เข้า PDFDocument ทำงานต่อได้ทันทีโดยไม่ต้อง fetch ผ่านเน็ต!
+            const pdfDoc = await PDFDocument.load(bytes);
+            const firstPage = pdfDoc.getPages()[0];
+
+            // ดึงค่าจากฟอร์ม
+            const docNo = document.getElementById('docNo').value;
+            const docDate = document.getElementById('docDate').value;
+            const cusName = document.getElementById('cusName').value;
+            const cusNo = document.getElementById('cusNo').value;
+            const address = document.getElementById('address').value;
+            const moo = document.getElementById('moo').value;
+            const phone = document.getElementById('phone').value;
+            const meterSize = document.getElementById('meterSize').value;
+            const peaNo = document.getElementById('peaNo').value;
+            const location = document.getElementById('location').value;
+            const officerName = document.getElementById('officerName').value;
+
+            // พิกัด X, Y
+            firstPage.drawText(docNo, { x: 450, y: 730, size: 10, rgb: rgb(0, 0, 0) });
+            firstPage.drawText(docDate, { x: 430, y: 700, size: 10, rgb: rgb(0, 0, 0) });
+            firstPage.drawText(cusName, { x: 130, y: 620, size: 10, rgb: rgb(0, 0, 0) });
+            firstPage.drawText(address, { x: 300, y: 620, size: 10, rgb: rgb(0, 0, 0) });
+            firstPage.drawText(moo, { x: 450, y: 620, size: 10, rgb: rgb(0, 0, 0) });
+            firstPage.drawText(phone, { x: 130, y: 595, size: 10, rgb: rgb(0, 0, 0) });
+            firstPage.drawText(cusNo, { x: 400, y: 595, size: 10, rgb: rgb(0, 0, 0) });
+            firstPage.drawText(meterSize, { x: 120, y: 565, size: 10, rgb: rgb(0, 0, 0) });
+            firstPage.drawText(peaNo, { x: 260, y: 565, size: 10, rgb: rgb(0, 0, 0) });
+            firstPage.drawText(location, { x: 150, y: 460, size: 10, rgb: rgb(0, 0, 0) });
+            firstPage.drawText(officerName, { x: 200, y: 340, size: 10, rgb: rgb(0, 0, 0) });
+
+            // สร้างและดาวน์โหลด
+            const pdfBytes = await pdfDoc.save();
+            const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'รายงานมิเตอร์ผิดปกติ-พิมพ์แล้ว.pdf';
+            link.click();
+
+        } catch (error) {
+            alert("เกิดข้อผิดพลาดในการสร้าง PDF: " + error.message);
+            console.error(error);
         }
+     }
     </script>
 </body>
 </html>
