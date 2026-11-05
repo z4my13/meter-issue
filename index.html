@@ -109,10 +109,10 @@
             const { PDFDocument, rgb } = PDFLib;
 
             try {
-                // 1. โหลดฟอนต์ภาษาไทยผ่าน CDN
-                const fontUrl = 'https://cdn.jsdelivr.net/npm/@expo-google-fonts/th-sarabun-new@0.2.2/THSarabunNew_400Regular.ttf';
+                    // // โหลดไฟล์ THSarabun.ttf จากโฟลเดอร์เดียวกันบน GitHub ของเราเอง
+                const fontUrl = 'THSarabun.ttf';
                 const fontBytes = await fetch(fontUrl).then(res => {
-                    if (!res.ok) throw new Error("ไม่สามารถดาวน์โหลดไฟล์ฟอนต์ภาษาไทยได้");
+                    if (!res.ok) throw new Error("ไม่พบไฟล์ฟอนต์ THSarabun.ttf ใน GitHub ของคุณ");
                     return res.arrayBuffer();
                 });
 
