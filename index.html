@@ -109,7 +109,7 @@
             const { PDFDocument, rgb } = PDFLib;
 
             try {
-                // โหลดฟอนต์ภาษาไทยผ่าน CDN สำรองที่รองรับ pdf-lib
+                // 1. โหลดฟอนต์ภาษาไทยผ่าน CDN
                 const fontUrl = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/thsarabunnew/THSarabunNew.ttf';
                 const fontBytes = await fetch(fontUrl).then(res => {
                     if (!res.ok) throw new Error("ไม่สามารถดาวน์โหลดไฟล์ฟอนต์ภาษาไทยได้");
@@ -147,7 +147,6 @@
                 // พิกัด X, Y พร้อมระบุฟอนต์ไทย customFont
                 const fontSize = 16;
                 firstPage.drawText(docNo, { x: 75, y: 661, size: fontSize, font: customFont, rgb: rgb(0, 0, 0) });
-                firstPage.drawTest = firstPage.drawText; // alias
                 firstPage.drawText(docDate, { x: 430, y: 700, size: fontSize, font: customFont, rgb: rgb(0, 0, 0) });
                 firstPage.drawText(cusName, { x: 130, y: 620, size: fontSize, font: customFont, rgb: rgb(0, 0, 0) });
                 firstPage.drawText(address, { x: 300, y: 620, size: fontSize, font: customFont, rgb: rgb(0, 0, 0) });
