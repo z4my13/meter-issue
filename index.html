@@ -342,30 +342,30 @@
             const officerName = document.getElementById('officerName').value;
 
             // พิกัดการวาง (สามารถจูนตัวเลข X, Y ต่อได้ตามเดิมครับ)
-            draw(docNo, 74, 661);       
-            draw(docDate, 313, 661);     
-            draw(cusName, 130, 620);
-            draw(address, 300, 620);
-            draw(moo, 450, 620);
-            draw(phone, 130, 595);
-            draw(cusNo, 400, 595);
-            draw(meterSize, 120, 565);
-            draw(peaNo, 260, 565);
+            draw(docNo, 74, 661);       //เลขที่หนังสือ
+            draw(docDate, 313, 661);     //ลงวันที่
+            draw(cusName, 130, 620);    //ชื่อ ผชฟ.
+            draw(address, 300, 620);    //ที่อยู่
+            draw(moo, 450, 620);        //หมู่
+            draw(phone, 130, 595);       //เบอร์โทร
+            draw(cusNo, 400, 595);    //CAหมายเลข ผชฟ
+            draw(meterSize, 120, 565);     //ขนาดมิเตอร์
+            draw(peaNo, 260, 565);            //PEAมิเตอร์
 
-            draw(time31, 220, 517);     
-            draw(date31, 350, 517);     
+            draw(time31, 220, 517);     //เวลาขณะมิเตอร์ชำรุด
+            draw(date31, 350, 517);     //วันที่มิเตอร์ชำรุด
 
-            draw(phase32, 180, 480);
-            draw(time32,  260, 480);
-            draw(date32,  390, 480);
+            draw(phase32, 180, 480);    //VTชำรุดเฟส ????
+            draw(time32,  260, 480);    //เวลาขณะVTชำรุด
+            draw(date32,  390, 480);    //วันที่VTชำรุด
 
-            draw(phase33, 180, 445);
-            draw(time33,  260, 445);
-            draw(date33,  390, 445);
+            draw(phase33, 180, 445);    //VTชำรุดเฟส ????
+            draw(time33,  260, 445);    //เวลาขณะCTชำรุด
+            draw(date33,  390, 445);    //เวลาขณะCTชำรุด
 
-            draw(location, 150, 400);
-            draw(officerName, 200, 340); //ชื่อผู้รายงาน
-            draw(officerName, 200, 340); //ชื่อผู้อยู่เวร Ref.ชื่อผู้รายงาน
+            draw(location, 150, 400);    //ละ,ลอง ถ้ามี
+            draw(officerName, 172, 578); //ชื่อผู้รายงาน
+            draw(officerName, 337, 329); //ชื่อผู้อยู่เวร Ref.ชื่อผู้รายงาน
 
             if (hasSignature) {
                 const sigDataUrl = sigCanvas.toDataURL('image/png');
