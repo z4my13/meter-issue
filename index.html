@@ -3,168 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบพิมพ์ใบรายงานมิเตอร์ผิดปกติ - กฟส.กำแพงแสน</title>
+    <title>รายงานมิเตอร์ผิดปกติ - กฟส.กำแพงแสน</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- pdf-lib -->
     <script src="https://unpkg.com/pdf-lib@1.4.0/dist/pdf-lib.min.js"></script>
     <!-- fontkit สำหรับรองรับฟอนต์ไทย -->
     <script src="https://unpkg.com/@pdf-lib/fontkit/dist/fontkit.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Sarabun', sans-serif; }
+    </style>
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans p-4 md:p-8">
-    <div class="max-w-3xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-md">
-        <h1 class="text-2xl font-bold text-blue-700 mb-2">⚡ ใบรายงานมิเตอร์ผิดปกติ</h1>
-        <p class="text-sm text-slate-500 mb-6">การไฟฟ้าส่วนภูมิภาค (กฟส.กำแพงแสน) - กรอกข้อมูลแล้วกดพรีวิวหรือดาวน์โหลด</p>
+<body class="bg-zinc-100 text-zinc-800 antialiased py-6 px-4 md:py-12">
+    <div class="max-w-2xl mx-auto bg-white border border-zinc-200/80 p-6 md:p-10 rounded-2xl shadow-xs">
+        <!-- Header -->
+        <div class="border-b border-zinc-100 pb-5 mb-6">
+            <span class="text-xs font-semibold tracking-wider text-zinc-400 uppercase">PEA • Provincial Electricity Authority</span>
+            <h1 class="text-xl md:text-2xl font-semibold text-zinc-900 mt-1">ใบรายงานมิเตอร์ผิดปกติ</h1>
+            <p class="text-xs md:text-sm text-zinc-500 mt-0.5">การไฟฟ้าส่วนภูมิภาค สาขาอำเภอกำแพงแสน</p>
+        </div>
 
-        <form id="meterForm" class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium mb-1">เลขที่เอกสาร</label>
-                    <input type="text" id="docNo" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="เช่น 001/2569">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">วันที่รายงาน</label>
-                    <input type="date" id="docDate" class="w-full p-2 border rounded-lg">
+        <form id="meterForm" class="space-y-6">
+            <!-- ส่วนที่ 1: ข้อมูลทั่วไป -->
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-zinc-600 mb-1.5">เลขที่เอกสาร</label>
+                        <input type="text" id="docNo" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="เช่น 001/2569">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-zinc-600 mb-1.5">วันที่รายงาน</label>
+                        <input type="date" id="docDate" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition">
+                    </div>
                 </div>
             </div>
 
-            <div class="border-t pt-4">
-                <h3 class="font-semibold text-blue-600 mb-3">1. ข้อมูลผู้ใช้ไฟฟ้า</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+            <!-- ส่วนที่ 2: ข้อมูลผู้ใช้ไฟฟ้า -->
+            <div class="border-t border-zinc-100 pt-5 space-y-4">
+                <h3 class="text-xs font-semibold tracking-wider text-zinc-400 uppercase">1. ข้อมูลผู้ใช้ไฟฟ้า</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium mb-1">ชื่อผู้ใช้ไฟฟ้า</label>
-                        <input type="text" id="cusName" class="w-full p-2 border rounded-lg" placeholder="นายสมชาย ใจดี">
+                        <label class="block text-xs font-medium text-zinc-600 mb-1.5">ชื่อผู้ใช้ไฟฟ้า</label>
+                        <input type="text" id="cusName" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="นายสมชาย ใจดี">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium mb-1">หมายเลขผู้ใช้ไฟ (Consumer No.)</label>
-                        <input type="text" id="cusNo" class="w-full p-2 border rounded-lg" placeholder="0200xxxxxx">
+                        <label class="block text-xs font-medium text-zinc-600 mb-1.5">หมายเลขผู้ใช้ไฟ (Consumer No.)</label>
+                        <input type="text" id="cusNo" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="0200xxxxxx">
                     </div>
                 </div>
+
                 <div class="grid grid-cols-3 gap-2">
                     <div class="col-span-2">
-                        <label class="block text-sm font-medium mb-1">ที่อยู่</label>
-                        <input type="text" id="address" class="w-full p-2 border rounded-lg" placeholder="บ้านเลขที่ / หมู่บ้าน">
+                        <label class="block text-xs font-medium text-zinc-600 mb-1.5">ที่อยู่</label>
+                        <input type="text" id="address" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="บ้านเลขที่ / หมู่บ้าน">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium mb-1">หมู่ที่ (ม.)</label>
-                        <input type="text" id="moo" class="w-full p-2 border rounded-lg" placeholder="เช่น 5">
+                        <label class="block text-xs font-medium text-zinc-600 mb-1.5">หมู่ที่</label>
+                        <input type="text" id="moo" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="เช่น 5">
                     </div>
                 </div>
-                <div class="mt-3">
-                    <label class="block text-sm font-medium mb-1">เบอร์โทรศัพท์</label>
-                    <input type="text" id="phone" class="w-full p-2 border rounded-lg" placeholder="08x-xxx-xxxx">
+
+                <div>
+                    <label class="block text-xs font-medium text-zinc-600 mb-1.5">เบอร์โทรศัพท์</label>
+                    <input type="text" id="phone" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="08x-xxx-xxxx">
                 </div>
             </div>
 
-            <div class="border-t pt-4">
-                <h3 class="font-semibold text-blue-600 mb-3">2. ข้อมูลมิเตอร์</h3>
-                <div class="grid grid-cols-2 gap-4">
+            <!-- ส่วนที่ 3: ข้อมูลมิเตอร์ -->
+            <div class="border-t border-zinc-100 pt-5 space-y-4">
+                <h3 class="text-xs font-semibold tracking-wider text-zinc-400 uppercase">2. ข้อมูลมิเตอร์</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium mb-1">ขนาดมิเตอร์</label>
-                        <select id="meterSize" class="w-full p-2 border rounded-lg bg-white">
+                        <label class="block text-xs font-medium text-zinc-600 mb-1.5">ขนาดมิเตอร์</label>
+                        <select id="meterSize" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition">
                             <option value="5(15)">5(15)</option>
                             <option value="5(45)">5(45)</option>
                             <option value="5(100)">5(100)</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium mb-1">PEA (หมายเลขซีเรียลมิเตอร์)</label>
-                        <input type="text" id="peaNo" class="w-full p-2 border rounded-lg" placeholder="หมายเลข PEA">
+                        <label class="block text-xs font-medium text-zinc-600 mb-1.5">PEA (หมายเลขซีเรียลมิเตอร์)</label>
+                        <input type="text" id="peaNo" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="หมายเลข PEA">
                     </div>
                 </div>
             </div>
 
-            <div class="border-t pt-4">
-                <h3 class="font-semibold text-blue-600 mb-3">3. รายละเอียดความผิดปกติ</h3>
-                <div class="space-y-4 text-sm md:text-base">
-                    <!-- 3.1 มิเตอร์ชำรุด -->
-                    <label class="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-2">
-                        <div class="flex items-center space-x-2">
-                            <input type="radio" name="errorType" value="3.1" checked class="text-blue-600">
-                            <span>3.1 มิเตอร์ชำรุด (ต่อตรงเวลา:</span>
+            <!-- ส่วนที่ 4: รายละเอียดความผิดปกติ -->
+            <div class="border-t border-zinc-100 pt-5 space-y-4">
+                <h3 class="text-xs font-semibold tracking-wider text-zinc-400 uppercase">3. รายละเอียดความผิดปกติ</h3>
+                
+                <div class="space-y-3 text-sm">
+                    <!-- 3.1 -->
+                    <label class="flex flex-col md:flex-row md:items-center justify-between p-3 bg-zinc-50/40 border border-zinc-200/60 rounded-xl gap-2 cursor-pointer hover:border-zinc-300 transition">
+                        <div class="flex items-center space-x-2.5">
+                            <input type="radio" name="errorType" value="3.1" checked class="accent-zinc-900">
+                            <span class="text-xs font-medium text-zinc-700">3.1 มิเตอร์ชำรุด (ต่อตรงเวลา)</span>
                         </div>
-                        <div class="flex items-center space-x-2 pl-6 md:pl-0">
-                            <input type="time" id="time31" class="border p-1 rounded text-sm"> 
-                            <span>น. วันที่</span>
-                            <input type="date" id="date31" class="border p-1 rounded text-sm">
-                            <span>)</span>
-                        </div>
-                    </label>
-
-                    <!-- 3.2 VT ชำรุด -->
-                    <label class="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-2">
-                        <div class="flex items-center space-x-2">
-                            <input type="radio" name="errorType" value="3.2" class="text-blue-600">
-                            <span>3.2 VT ชำรุด เฟส</span>
-                        </div>
-                        <div class="flex items-center space-x-2 pl-6 md:pl-0 flex-wrap">
-                            <input type="text" id="phase32" class="border-b px-1 w-12 text-sm text-center">
-                            <span>เวลา</span>
-                            <input type="time" id="time32" class="border p-1 rounded text-sm">
-                            <span>น. วันที่</span>
-                            <input type="date" id="date32" class="border p-1 rounded text-sm">
+                        <div class="flex items-center space-x-1.5 text-xs">
+                            <input type="time" id="time31" class="border border-zinc-200 bg-white px-2 py-1 rounded">
+                            <span class="text-zinc-400">น.</span>
+                            <input type="date" id="date31" class="border border-zinc-200 bg-white px-2 py-1 rounded">
                         </div>
                     </label>
 
-                    <!-- 3.3 CT ชำรุด -->
-                    <label class="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-2">
-                        <div class="flex items-center space-x-2">
-                            <input type="radio" name="errorType" value="3.3" class="text-blue-600">
-                            <span>3.3 CT ชำรุด เฟส</span>
+                    <!-- 3.2 -->
+                    <label class="flex flex-col md:flex-row md:items-center justify-between p-3 bg-zinc-50/40 border border-zinc-200/60 rounded-xl gap-2 cursor-pointer hover:border-zinc-300 transition">
+                        <div class="flex items-center space-x-2.5">
+                            <input type="radio" name="errorType" value="3.2" class="accent-zinc-900">
+                            <span class="text-xs font-medium text-zinc-700">3.2 VT ชำรุด เฟส</span>
+                            <input type="text" id="phase32" class="border-b border-zinc-300 bg-transparent px-1 w-8 text-center text-xs font-medium focus:outline-none">
                         </div>
-                        <div class="flex items-center space-x-2 pl-6 md:pl-0 flex-wrap">
-                            <input type="text" id="phase33" class="border-b px-1 w-12 text-sm text-center">
-                            <span>เวลา</span>
-                            <input type="time" id="time33" class="border p-1 rounded text-sm">
-                            <span>น. วันที่</span>
-                            <input type="date" id="date33" class="border p-1 rounded text-sm">
+                        <div class="flex items-center space-x-1.5 text-xs">
+                            <input type="time" id="time32" class="border border-zinc-200 bg-white px-2 py-1 rounded">
+                            <span class="text-zinc-400">น.</span>
+                            <input type="date" id="date32" class="border border-zinc-200 bg-white px-2 py-1 rounded">
+                        </div>
+                    </label>
+
+                    <!-- 3.3 -->
+                    <label class="flex flex-col md:flex-row md:items-center justify-between p-3 bg-zinc-50/40 border border-zinc-200/60 rounded-xl gap-2 cursor-pointer hover:border-zinc-300 transition">
+                        <div class="flex items-center space-x-2.5">
+                            <input type="radio" name="errorType" value="3.3" class="accent-zinc-900">
+                            <span class="text-xs font-medium text-zinc-700">3.3 CT ชำรุด เฟส</span>
+                            <input type="text" id="phase33" class="border-b border-zinc-300 bg-transparent px-1 w-8 text-center text-xs font-medium focus:outline-none">
+                        </div>
+                        <div class="flex items-center space-x-1.5 text-xs">
+                            <input type="time" id="time33" class="border border-zinc-200 bg-white px-2 py-1 rounded">
+                            <span class="text-zinc-400">น.</span>
+                            <input type="date" id="date33" class="border border-zinc-200 bg-white px-2 py-1 rounded">
                         </div>
                     </label>
                 </div>
             </div>
 
-            <div class="border-t pt-4">
-                <label class="block text-sm font-medium mb-1">4. สถานที่ / บริเวณใกล้เคียง</label>
-                <input type="text" id="location" class="w-full p-2 border rounded-lg" placeholder="จุดสังเกต / สถานใกล้เคียง">
-            </div>
+            <!-- ส่วนที่ 5: สถานที่และพนักงาน -->
+            <div class="border-t border-zinc-100 pt-5 space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-zinc-600 mb-1.5">4. สถานที่ / บริเวณใกล้เคียง</label>
+                    <input type="text" id="location" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="จุดสังเกต / สถานใกล้เคียง">
+                </div>
 
-            <div class="border-t pt-4 space-y-3">
-                <label class="block text-sm font-medium">ชื่อพนักงานผู้รายงาน (พชง.)</label>
-                <input type="text" id="officerName" class="w-full p-2 border rounded-lg" placeholder="ชื่อ-นามสกุล พชง.">
+                <div>
+                    <label class="block text-xs font-medium text-zinc-600 mb-1.5">ชื่อพนักงานผู้รายงาน (พชง.)</label>
+                    <input type="text" id="officerName" class="w-full px-3 py-2 text-sm bg-zinc-50/50 border border-zinc-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900 transition" placeholder="ชื่อ-นามสกุล พชง.">
+                </div>
 
                 <!-- ลายเซ็น -->
-                <div>
-                    <div class="flex justify-between items-center mb-1">
-                        <label class="block text-sm font-medium text-slate-700">ลายเซ็นพนักงาน (วาดด้วยมือ/เมาส์)</label>
-                        <button type="button" onclick="clearSignature()" class="text-xs text-red-600 hover:text-red-800 font-semibold cursor-pointer">
-                            🗑️ ล้างลายเซ็น
+                <div class="pt-1">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <label class="block text-xs font-medium text-zinc-600">ลายเซ็นพนักงานผู้รายงาน</label>
+                        <button type="button" onclick="clearSignature()" class="text-xs text-zinc-400 hover:text-zinc-700 transition cursor-pointer">
+                            ล้างลายเซ็น
                         </button>
                     </div>
-                    <div class="border-2 border-dashed border-slate-300 rounded-lg overflow-hidden bg-slate-50 touch-none">
-                        <canvas id="sigCanvas" width="500" height="150" class="w-full h-36 cursor-crosshair block"></canvas>
+                    <div class="border border-zinc-200 rounded-xl overflow-hidden bg-white touch-none shadow-2xs">
+                        <canvas id="sigCanvas" width="500" height="130" class="w-full h-32 cursor-crosshair block"></canvas>
                     </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-                <button type="button" onclick="previewPDF()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition shadow-lg cursor-pointer flex items-center justify-center space-x-2">
-                    <span>👁️ พรีวิว / ปริ้นท์ (ไม่เปลืองพื้นที่)</span>
+            <!-- Action Buttons -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-4">
+                <button type="button" onclick="previewPDF()" class="w-full py-2.5 px-4 text-sm font-medium bg-white border border-zinc-300 text-zinc-700 rounded-xl hover:bg-zinc-50 transition cursor-pointer shadow-2xs">
+                    👁️ พรีวิวเอกสาร
                 </button>
-                <button type="button" onclick="downloadPDF()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition shadow-lg cursor-pointer flex items-center justify-center space-x-2">
-                    <span>📥 ดาวน์โหลดไฟล์ PDF</span>
+                <button type="button" onclick="downloadPDF()" class="w-full py-2.5 px-4 text-sm font-medium bg-zinc-900 text-white rounded-xl hover:bg-zinc-800 transition cursor-pointer shadow-2xs">
+                    📥 ดาวน์โหลด PDF
                 </button>
             </div>
         </form>
     </div>
 
-    <div id="previewModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center p-4 z-50">
-        <div class="bg-white w-full max-w-4xl h-[90vh] rounded-2xl flex flex-col overflow-hidden shadow-2xl">
-            <div class="bg-slate-800 text-white px-6 py-4 flex justify-between items-center">
-                <h3 class="font-bold text-lg">📄 พรีวิวตัวอย่างก่อนพิมพ์</h3>
-                <button onclick="closePreview()" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm font-bold cursor-pointer">ปิดหน้าต่าง</button>
+    <!-- Preview Modal -->
+    <div id="previewModal" class="fixed inset-0 bg-black/40 backdrop-blur-xs hidden items-center justify-center p-4 z-50">
+        <div class="bg-white w-full max-w-4xl h-[90vh] rounded-2xl flex flex-col overflow-hidden shadow-2xl border border-zinc-200">
+            <div class="bg-zinc-900 text-white px-6 py-3.5 flex justify-between items-center">
+                <h3 class="font-medium text-sm">พรีวิวเอกสาร PDF</h3>
+                <button onclick="closePreview()" class="text-xs bg-zinc-800 hover:bg-zinc-700 text-zinc-200 px-3 py-1.5 rounded-lg transition cursor-pointer">ปิดหน้าต่าง</button>
             </div>
-            <div class="flex-1 bg-slate-100 p-2">
-                <iframe id="pdfPreviewFrame" class="w-full h-full rounded-lg border"></iframe>
+            <div class="flex-1 bg-zinc-100 p-2">
+                <iframe id="pdfPreviewFrame" class="w-full h-full rounded-xl border border-zinc-200 bg-white"></iframe>
             </div>
         </div>
     </div>
@@ -186,14 +207,12 @@
             document.getElementById('time32').value = nowStr;
             document.getElementById('time33').value = nowStr;
 
-            // ระบบวาดลายเซ็น (Canvas)
             sigCanvas = document.getElementById('sigCanvas');
             sigCtx = sigCanvas.getContext('2d');
-            sigCtx.lineWidth = 2.5;
+            sigCtx.lineWidth = 2;
             sigCtx.lineCap = 'round';
-            sigCtx.strokeStyle = '#000000';
+            sigCtx.strokeStyle = '#18181b';
 
-            // Event Listeners สำหรับเมาส์และ Touch หน้าจอ
             sigCanvas.addEventListener('mousedown', startDrawing);
             sigCanvas.addEventListener('mousemove', drawLine);
             sigCanvas.addEventListener('mouseup', stopDrawing);
@@ -259,21 +278,19 @@
 
             const fontUrl = baseUrl + '/THSarabun.ttf';
             const fontBytes = await fetch(fontUrl).then(res => {
-                if (!res.ok) throw new Error("ไม่พบไฟล์ฟอนต์ THSarabun.ttf ใน GitHub");
+                if (!res.ok) throw new Error("ไม่พบไฟล์ฟอนต์ THSarabun.ttf");
                 return res.arrayBuffer();
             });
 
             const pdfUrl = baseUrl + '/template.pdf';
             const existingPdfBytes = await fetch(pdfUrl).then(res => {
-                if (!res.ok) throw new Error("ไม่พบไฟล์ template.pdf ใน GitHub");
+                if (!res.ok) throw new Error("ไม่พบไฟล์ template.pdf");
                 return res.arrayBuffer();
             });
 
             const pdfDoc = await PDFDocument.load(existingPdfBytes);
-            
             pdfDoc.registerFontkit(fontkit);
             const customFont = await pdfDoc.embedFont(fontBytes);
-
             const firstPage = pdfDoc.getPages()[0];
 
             const draw = (text, x, y) => {
@@ -300,7 +317,6 @@
                 return `${cleanDay} ${thaiMonth} ${thaiYear}`;
             };
 
-            // ดึงค่าจากฟอร์ม
             const docNo = document.getElementById('docNo').value;
             const docDate = formatThaiDate(document.getElementById('docDate').value);
             const cusName = document.getElementById('cusName').value;
@@ -325,7 +341,7 @@
             const location = document.getElementById('location').value;
             const officerName = document.getElementById('officerName').value;
 
-            // วาดข้อมูลลง PDF
+            // พิกัดการวาง (สามารถจูนตัวเลข X, Y ต่อได้ตามเดิมครับ)
             draw(docNo, 74, 661);       
             draw(docDate, 430, 700);     
             draw(cusName, 130, 620);
@@ -350,13 +366,11 @@
             draw(location, 150, 400);
             draw(officerName, 200, 340);
 
-            // ฝังลายเซ็นลงใน PDF (หากมีการวาด)
             if (hasSignature) {
                 const sigDataUrl = sigCanvas.toDataURL('image/png');
                 const sigImageBytes = await fetch(sigDataUrl).then(res => res.arrayBuffer());
                 const sigImage = await pdfDoc.embedPng(sigImageBytes);
                 
-                // สามารถปรับตำแหน่ง x, y และขนาด width, height ของลายเซ็นตรงนี้ได้ตามต้องการครับ
                 firstPage.drawImage(sigImage, {
                     x: 200,
                     y: 340,
@@ -373,7 +387,6 @@
                 const pdfBytes = await createPDFDocument();
                 const blob = new Blob([pdfBytes], { type: 'application/pdf' });
                 const blobUrl = URL.createObjectURL(blob);
-
                 document.getElementById('pdfPreviewFrame').src = blobUrl;
                 document.getElementById('previewModal').classList.remove('hidden');
                 document.getElementById('previewModal').classList.add('flex');
@@ -395,7 +408,7 @@
                 const blob = new Blob([pdfBytes], { type: 'application/pdf' });
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
-                link.download = 'รายงานมิเตอร์ผิดปกติ-พิมพ์แล้ว.pdf';
+                link.download = 'รายงานมิเตอร์ผิดปกติ.pdf';
                 link.click();
             } catch (error) {
                 alert("เกิดข้อผิดพลาดในการดาวน์โหลด: " + error.message);
