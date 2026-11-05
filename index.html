@@ -109,15 +109,18 @@
             const { PDFDocument, rgb } = PDFLib;
 
             try {
-                    // // โหลดไฟล์ THSarabun.ttf จากโฟลเดอร์เดียวกันบน GitHub ของเราเอง
-                const fontUrl = 'THSarabun.ttf';
+                // หาพาทสัมบูรณ์ (Base URL) บน GitHub Pages ป้องกัน 404
+                const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '');
+
+                // 1. โหลดไฟล์ THSarabun.ttf จาก GitHub ด้วยพาทเต็ม
+                const fontUrl = baseUrl + '/THSarabun.ttf';
                 const fontBytes = await fetch(fontUrl).then(res => {
-                    if (!res.ok) throw new Error("ไม่พบไฟล์ฟอนต์ THSarabun.ttf ใน GitHub ของคุณ");
+                    if (!res.ok) throw new Error("ไม่พบไฟล์ฟอนต์ THSarabun.ttf ใน GitHub");
                     return res.arrayBuffer();
                 });
 
-                // 2. โหลดไฟล์ template.pdf จากโฟลเดอร์เดียวกันบน GitHub
-                const pdfUrl = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '') + '/template.pdf';
+                // 2. โหลดไฟล์ template.pdf จาก GitHub
+                const pdfUrl = baseUrl + '/template.pdf';
                 const existingPdfBytes = await fetch(pdfUrl).then(res => {
                     if (!res.ok) throw new Error("ไม่พบไฟล์ template.pdf ใน GitHub");
                     return res.arrayBuffer();
@@ -125,11 +128,24 @@
 
                 const pdfDoc = await PDFDocument.load(existingPdfBytes);
                 
-                // 3. ลงทะเบียน fontkit และฝังฟอนต์ไทย
+                // 3. ฝังฟอนต์ภาษาไทย
                 pdfDoc.registerFontkit(fontkit);
                 const customFont = await pdfDoc.embedFont(fontBytes);
 
                 const firstPage = pdfDoc.getPages()[0];
+                const pageHeight = firstPage.getHeight(); // คำนวณความสูงกระดาษจริงอัตโนมัติ
+
+                // ฟังก์ชันช่วยแปลงค่า Y จากระบบ "บนลงล่าง" ให้เป็นระบบ "ล่างขึ้นบน" ของ pdf-lib
+                const draw = (text, x, topY) => {
+                    const fontSize = 16;
+                    firstPage.drawText(text || '', {
+                        x: x,
+                        y: pageHeight - topY,
+                        size: fontSize,
+                        font: customFont,
+                        rgb: rgb(0, 0, 0)
+                    });
+                };
 
                 // ดึงค่าจากฟอร์ม
                 const docNo = document.getElementById('docNo').value;
@@ -144,21 +160,20 @@
                 const location = document.getElementById('location').value;
                 const officerName = document.getElementById('officerName').value;
 
-                // พิกัด X, Y พร้อมระบุฟอนต์ไทย customFont
-                const fontSize = 16;
-                firstPage.drawText(docNo, { x: 75, y: 661, size: fontSize, font: customFont, rgb: rgb(0, 0, 0) });
-                firstPage.drawText(docDate, { x: 430, y: 700, size: fontSize, font: customFont, rgb: rgb(0, 0, 0) });
-                firstPage.drawText(cusName, { x: 130, y: 620, size: fontSize, font: customFont, rgb: rgb(0, 0, 0) });
-                firstPage.drawText(address, { x: 300, y: 620, size: fontSize, font: customFont, rgb: rgb(0, 0, 0) });
-                firstPage.drawText(moo, { x: 450, y: 620, size: fontSize, font: customFont, rgb: rgb(0, 0, 0) });
-                firstPage.drawText(phone, { x: 130, y: 595, size: fontSize, font: customFont, rgb: rgb(0, 0, 0) });
-                firstPage.drawText(cusNo, { x: 400, y: 595, size: fontSize, font: customFont, rgb: rgb(0, 0, 0) });
-                firstPage.drawText(meterSize, { x: 120, y: 565, size: fontSize, font: customFont, rgb: rgb(0, 0, 0) });
-                firstPage.drawText(peaNo, { x: 260, y: 565, size: fontSize, font: customFont, rgb: rgb(0, 0, 0) });
-                firstPage.drawText(location, { x: 150, y: 460, size: fontSize, font: customFont, rgb: rgb(0, 0, 0) });
-                firstPage.drawText(officerName, { x: 200, y: 340, size: fontSize, font: customFont, rgb: rgb(0, 0, 0) });
+                // พิกัดแบบ Top-Left (ใส่ค่า X, Y จากเว็บส่องพิกัดได้เลย โค้ดจะลบความสูงให้อัตโนมัติ)
+                draw(docNo, 75, 661);       // ใช้ค่า x=75, y=661 จากที่คุณวัดได้ทันที
+                draw(docDate, 430, 92);
+                draw(cusName, 130, 172);
+                draw(address, 300, 172);
+                draw(moo, 450, 172);
+                draw(phone, 130, 197);
+                draw(cusNo, 400, 197);
+                draw(meterSize, 120, 227);
+                draw(peaNo, 260, 227);
+                draw(location, 150, 332);
+                draw(officerName, 200, 452);
 
-                // สร้างและดาวน์โหลดไฟล์ PDF
+                // สร้างและดาวน์โหลด PDF
                 const pdfBytes = await pdfDoc.save();
                 const blob = new Blob([pdfBytes], { type: 'application/pdf' });
                 const link = document.createElement('a');
