@@ -72,7 +72,8 @@
 
             <div class="border-t pt-4">
                 <h3 class="font-semibold text-blue-600 mb-3">3. รายละเอียดความผิดปกติ</h3>
-                <div class="space-y-3 text-sm md:text-base">
+                <div class="space-y-4 text-sm md:text-base">
+                    <!-- 3.1 มิเตอร์ชำรุด -->
                     <label class="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-2">
                         <div class="flex items-center space-x-2">
                             <input type="radio" name="errorType" value="3.1" checked class="text-blue-600">
@@ -86,27 +87,35 @@
                         </div>
                     </label>
 
-                    <div class="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-2">
-                        <label class="flex items-center space-x-2">
+                    <!-- 3.2 VT ชำรุด -->
+                    <label class="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-2">
+                        <div class="flex items-center space-x-2">
                             <input type="radio" name="errorType" value="3.2" class="text-blue-600">
                             <span>3.2 VT ชำรุด เฟส</span>
-                        </label>
-                        <input type="text" id="phase32" class="border-b px-1 w-12 text-sm" placeholder="R">
-                        <span>เวลา</span>
-                        <input type="time" id="time32" class="border p-1 rounded text-sm">
-                        <span>น.</span>
-                    </div>
+                        </div>
+                        <div class="flex items-center space-x-2 pl-6 md:pl-0 flex-wrap">
+                            <input type="text" id="phase32" class="border-b px-1 w-12 text-sm text-center" placeholder="R">
+                            <span>เวลา</span>
+                            <input type="time" id="time32" class="border p-1 rounded text-sm">
+                            <span>น. วันที่</span>
+                            <input type="date" id="date32" class="border p-1 rounded text-sm">
+                        </div>
+                    </label>
 
-                    <div class="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-2">
-                        <label class="flex items-center space-x-2">
+                    <!-- 3.3 CT ชำรุด -->
+                    <label class="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-2">
+                        <div class="flex items-center space-x-2">
                             <input type="radio" name="errorType" value="3.3" class="text-blue-600">
                             <span>3.3 CT ชำรุด เฟส</span>
-                        </label>
-                        <input type="text" id="phase33" class="border-b px-1 w-12 text-sm" placeholder="S">
-                        <span>เวลา</span>
-                        <input type="time" id="time33" class="border p-1 rounded text-sm">
-                        <span>น.</span>
-                    </div>
+                        </div>
+                        <div class="flex items-center space-x-2 pl-6 md:pl-0 flex-wrap">
+                            <input type="text" id="phase33" class="border-b px-1 w-12 text-sm text-center" placeholder="S">
+                            <span>เวลา</span>
+                            <input type="time" id="time33" class="border p-1 rounded text-sm">
+                            <span>น. วันที่</span>
+                            <input type="date" id="date33" class="border p-1 rounded text-sm">
+                        </div>
+                    </label>
                 </div>
             </div>
 
@@ -120,7 +129,6 @@
                 <input type="text" id="officerName" class="w-full p-2 border rounded-lg" placeholder="ชื่อ-นามสกุล พชง.">
             </div>
 
-            <!-- กลุ่มปุ่มกด: พรีวิว/ปริ้นท์ และ ดาวน์โหลด -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                 <button type="button" onclick="previewPDF()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition shadow-lg cursor-pointer flex items-center justify-center space-x-2">
                     <span>👁️ พรีวิว / ปริ้นท์ (ไม่เปลืองพื้นที่)</span>
@@ -132,7 +140,6 @@
         </form>
     </div>
 
-    <!-- ส่วนแสดง Modal สำหรับพรีวิว PDF ในหน้าเว็บ -->
     <div id="previewModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center p-4 z-50">
         <div class="bg-white w-full max-w-4xl h-[90vh] rounded-2xl flex flex-col overflow-hidden shadow-2xl">
             <div class="bg-slate-800 text-white px-6 py-4 flex justify-between items-center">
@@ -150,6 +157,8 @@
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('docDate').value = today;
             document.getElementById('date31').value = today;
+            document.getElementById('date32').value = today;
+            document.getElementById('date33').value = today;
 
             const nowStr = new Date().toTimeString().slice(0, 5);
             document.getElementById('time31').value = nowStr;
@@ -157,7 +166,6 @@
             document.getElementById('time33').value = nowStr;
         });
 
-        // ฟังก์ชันสร้าง PDF (ใช้ร่วมกันทั้งพรีวิวและดาวน์โหลด)
         async function createPDFDocument() {
             const { PDFDocument, rgb } = PDFLib;
 
@@ -181,13 +189,13 @@
             const customFont = await pdfDoc.embedFont(fontBytes);
 
             const firstPage = pdfDoc.getPages()[0];
-            const pageHeight = firstPage.getHeight();
 
+            // ใช้ฟังก์ชัน draw ที่รับค่า y ตรงๆ ตามที่คุณเซ็ตไว้ได้เลย
             const draw = (text, x, y) => {
                 const fontSize = 16;
                 firstPage.drawText(text || '', {
                     x: x,
-                    y: y, // เอาค่า y ที่ได้มาใส่ตรงๆ ได้เลย ไม่ต้องเอาไปลบกับ pageHeight แล้วครับ!
+                    y: y,
                     size: fontSize,
                     font: customFont,
                     rgb: rgb(0, 0, 0)
@@ -218,31 +226,54 @@
             const meterSize = document.getElementById('meterSize').value;
             const peaNo = document.getElementById('peaNo').value;
             
+            // ข้อมูล 3.1
             const time31 = document.getElementById('time31').value;
             const date31 = formatThaiDate(document.getElementById('date31').value);
+
+            // ข้อมูล 3.2
+            const phase32 = document.getElementById('phase32').value;
+            const time32 = document.getElementById('time32').value;
+            const date32 = formatThaiDate(document.getElementById('date32').value);
+
+            // ข้อมูล 3.3
+            const phase33 = document.getElementById('phase33').value;
+            const time33 = document.getElementById('time33').value;
+            const date33 = formatThaiDate(document.getElementById('date33').value);
 
             const location = document.getElementById('location').value;
             const officerName = document.getElementById('officerName').value;
 
-            // วาดข้อมูลลง PDF
-            draw(docNo, 75, 661);       
-            draw(docDate, 313, 661);     
-            draw(cusName, 130, 172);
-            draw(address, 300, 172);
-            draw(moo, 450, 172);
-            draw(phone, 130, 197);
-            draw(cusNo, 400, 197);
-            draw(meterSize, 120, 227);
-            draw(peaNo, 260, 227);
-            draw(time31, 220, 275);     
-            draw(date31, 350, 275);     
-            draw(location, 150, 332);
-            draw(officerName, 200, 452);
+            // วาดข้อมูลลง PDF (ปรับแก้พิกัด X, Y ตามฟอร์มจริงได้เลยครับ)
+            draw(docNo, 74, 661);       
+            draw(docDate, 430, 700);     // วันที่รายงาน
+            draw(cusName, 130, 620);
+            draw(address, 300, 620);
+            draw(moo, 450, 620);
+            draw(phone, 130, 595);
+            draw(cusNo, 400, 595);
+            draw(meterSize, 120, 565);
+            draw(peaNo, 260, 565);
+
+            // พิกัด 3.1
+            draw(time31, 220, 517);     
+            draw(date31, 350, 517);     
+
+            // พิกัด 3.2 (สามารถปรับตัวเลข X, Y ด้านหลังได้ตามตำแหน่งจริงบนแบบฟอร์ม)
+            draw(phase32, 180, 480);
+            draw(time32,  260, 480);
+            draw(date32,  390, 480);
+
+            // พิกัด 3.3 (สามารถปรับตัวเลข X, Y ด้านหลังได้ตามตำแหน่งจริงบนแบบฟอร์ม)
+            draw(phase33, 180, 445);
+            draw(time33,  260, 445);
+            draw(date33,  390, 445);
+
+            draw(location, 150, 400);
+            draw(officerName, 200, 340);
 
             return await pdfDoc.save();
         }
 
-        // ปุ่มพรีวิว (เปิดหน้าต่าง Modal พร้อมปุ่ม Print ภายในตัว)
         async function previewPDF() {
             try {
                 const pdfBytes = await createPDFDocument();
@@ -264,7 +295,6 @@
             document.getElementById('pdfPreviewFrame').src = "";
         }
 
-        // ปุ่มดาวน์โหลดไฟล์ลงเครื่อง
         async function downloadPDF() {
             try {
                 const pdfBytes = await createPDFDocument();
