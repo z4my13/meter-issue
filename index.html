@@ -73,26 +73,43 @@
             <div class="border-t pt-4">
                 <h3 class="font-semibold text-blue-600 mb-3">3. รายละเอียดความผิดปกติ</h3>
                 <div class="space-y-3 text-sm md:text-base">
+                    <!-- 3.1 มิเตอร์ชำรุด -->
                     <label class="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-2">
                         <div class="flex items-center space-x-2">
                             <input type="radio" name="errorType" value="3.1" checked class="text-blue-600">
                             <span>3.1 มิเตอร์ชำรุด (ต่อตรงเวลา:</span>
                         </div>
                         <div class="flex items-center space-x-2 pl-6 md:pl-0">
-                            <input type="text" id="time31" class="border-b px-1 w-24 text-sm" placeholder="09:00"> 
+                            <input type="time" id="time31" class="border p-1 rounded text-sm"> 
                             <span>น. วันที่</span>
                             <input type="date" id="date31" class="border p-1 rounded text-sm">
                             <span>)</span>
                         </div>
                     </label>
-                    <label class="flex items-center space-x-2">
-                        <input type="radio" name="errorType" value="3.2" class="text-blue-600">
-                        <span>3.2 VT ชำรุด เฟส <input type="text" id="phase32" class="border-b px-1 w-12 text-sm"> เวลา <input type="text" id="time32" class="border-b px-1 w-20 text-sm"> น.</span>
-                    </label>
-                    <label class="flex items-center space-x-2">
-                        <input type="radio" name="errorType" value="3.3" class="text-blue-600">
-                        <span>3.3 CT ชำรุด เฟส <input type="text" id="phase33" class="border-b px-1 w-12 text-sm"> เวลา <input type="text" id="time33" class="border-b px-1 w-20 text-sm"> น.</span>
-                    </label>
+
+                    <!-- 3.2 VT ชำรุด -->
+                    <div class="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-2">
+                        <label class="flex items-center space-x-2">
+                            <input type="radio" name="errorType" value="3.2" class="text-blue-600">
+                            <span>3.2 VT ชำรุด เฟส</span>
+                        </label>
+                        <input type="text" id="phase32" class="border-b px-1 w-12 text-sm" placeholder="R">
+                        <span>เวลา</span>
+                        <input type="time" id="time32" class="border p-1 rounded text-sm">
+                        <span>น.</span>
+                    </div>
+
+                    <!-- 3.3 CT ชำรุด -->
+                    <div class="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-2">
+                        <label class="flex items-center space-x-2">
+                            <input type="radio" name="errorType" value="3.3" class="text-blue-600">
+                            <span>3.3 CT ชำรุด เฟส</span>
+                        </label>
+                        <input type="text" id="phase33" class="border-b px-1 w-12 text-sm" placeholder="S">
+                        <span>เวลา</span>
+                        <input type="time" id="time33" class="border p-1 rounded text-sm">
+                        <span>น.</span>
+                    </div>
                 </div>
             </div>
 
@@ -113,11 +130,16 @@
     </div>
 
     <script>
-        // ตั้งค่าเริ่มต้นช่องวันที่ให้เป็นวันปัจจุบันอัตโนมัติ
+        // ตั้งค่าเริ่มต้นช่องวันที่และเวลาให้เป็นปัจจุบันอัตโนมัติ
         window.addEventListener('DOMContentLoaded', () => {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('docDate').value = today;
             document.getElementById('date31').value = today;
+
+            const nowStr = new Date().toTimeString().slice(0, 5); // รูปแบบ HH:MM
+            document.getElementById('time31').value = nowStr;
+            document.getElementById('time32').value = nowStr;
+            document.getElementById('time33').value = nowStr;
         });
 
         async function generatePDF() {
@@ -187,6 +209,12 @@
                 const time31 = document.getElementById('time31').value;
                 const date31 = formatThaiDate(document.getElementById('date31').value);
 
+                // ข้อมูลหัวข้อ 3.2 และ 3.3
+                const phase32 = document.getElementById('phase32').value;
+                const time32 = document.getElementById('time32').value;
+                const phase33 = document.getElementById('phase33').value;
+                const time33 = document.getElementById('time33').value;
+
                 const location = document.getElementById('location').value;
                 const officerName = document.getElementById('officerName').value;
 
@@ -201,9 +229,11 @@
                 draw(meterSize, 120, 227);
                 draw(peaNo, 260, 227);
 
-                // พิกัดสำหรับหัวข้อ 3.1 (เวลา และ วันที่ชำรุด) - ปรับตัวเลขพิกัดตามหน้าฟอร์มจริงของคุณได้เลยครับ
-                draw(time31, 220, 275);     // เวลาต่อตรง 3.1
-                draw(date31, 350, 275);     // วันที่ต่อตรง 3.1
+                // พิกัดสำหรับหัวข้อ 3.1 (เวลา และ วันที่ชำรุด)
+                draw(time31, 220, 275);     
+                draw(date31, 350, 275);     
+
+                // (ถ้าต้องการเพิ่มพิกัดของ 3.2 หรือ 3.3 เพิ่มเติม สามารถใช้ฟังก์ชัน draw ตรงนี้ได้เลยครับ)
 
                 draw(location, 150, 332);
                 draw(officerName, 200, 452);
