@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบกรอกฟอร์มรายงานมิเตอร์ผิดปกติ - กฟส.กำแพงแสน</title>
+    <!-- Tailwind CSS สำหรับจัดหน้าเว็บให้สวยงามใช้งานง่ายบนมือถือ -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- pdf-lib สำหรับจัดการวางข้อความลง PDF -->
+    <script src="https://unpkg.com/pdf-lib@1.4.0/dist/pdf-lib.min.js"></script>
+    <!-- Thai Font support if needed, using standard canvas mapping -->
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans p-4 md:p-8">
+    <div class="max-w-3xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-md">
+        <h1 class="text-2xl font-bold text-blue-700 mb-2">⚡ ระบบพิมพ์ใบรายงานมิเตอร์ผิดปกติ</h1>
+        <p class="text-sm text-slate-500 mb-6">การไฟฟ้าส่วนภูมิภาค (กฟส.กำแพงแสน) - กรอกข้อมูลแล้วกดสร้าง PDF เพื่อพิมพ์ลงกระดาษจริง</p>
+
+        <form id="meterForm" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">เลขที่เอกสาร</label>
+                    <input type="text" id="docNo" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="เช่น 001/2569">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">วันที่</label>
+                    <input type="text" id="docDate" class="w-full p-2 border rounded-lg" value="ว/ด/ป">
+                </div>
+            </div>
+
+            <div class="border-t pt-4">
+                <h3 class="font-semibold text-blue-600 mb-3">1. ข้อมูลผู้ใช้ไฟฟ้า</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">ชื่อผู้ใช้ไฟฟ้า</label>
+                        <input type="text" id="cusName" class="w-full p-2 border rounded-lg" placeholder="นายสมชาย ใจดี">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">หมายเลขผู้ใช้ไฟ (Consumer No.)</label>
+                        <input type="text" id="cusNo" class="w-full p-2 border rounded-lg" placeholder="0200xxxxxx">
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="col-span-2">
+                        <label class="block text-sm font-medium mb-1">ที่อยู่</label>
+                        <input type="text" id="address" class="w-full p-2 border rounded-lg" placeholder="บ้านเลขที่ / หมู่บ้าน">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">หมู่ที่ (ม.)</label>
+                        <input type="text" id="moo" class="w-full p-2 border rounded-lg" placeholder="เช่น 5">
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <label class="block text-sm font-medium mb-1">เบอร์โทรศัพท์</label>
+                    <input type="text" id="phone" class="w-full p-2 border rounded-lg" placeholder="08x-xxx-xxxx">
+                </div>
+            </div>
+
+            <div class="border-t pt-4">
+                <h3 class="font-semibold text-blue-600 mb-3">2. ข้อมูลมิเตอร์</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">ขนาดมิเตอร์</label>
+                        <input type="text" id="meterSize" class="w-full p-2 border rounded-lg" placeholder="เช่น 5(15) หรือ 15(45)">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">PEA (หมายเลขซีเรียลมิเตอร์)</label>
+                        <input type="text" id="peaNo" class="w-full p-2 border rounded-lg" placeholder="หมายเลข PEA">
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t pt-4">
+                <h3 class="font-semibold text-blue-600 mb-3">3. รายละเอียดความผิดปกติ</h3>
+                <div class="space-y-2">
+                    <label class="flex items-center space-x-2">
+                        <input type="radio" name="errorType" value="3.1" checked class="text-blue-600">
+                        <span>3.1 มิเตอร์ชำรุด (ต่อตรงเวลา: <input type="text" id="time31" class="border-b px-1 w-24 text-sm" placeholder="09:00"> น. วันที่ <input type="text" id="date31" class="border-b px-1 w-28 text-sm" placeholder="ว/ด/ป">)</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="radio" name="errorType" value="3.2" class="text-blue-600">
+                        <span>3.2 VT ชำรุด เฟส <input type="text" id="phase32" class="border-b px-1 w-12 text-sm"> เวลา <input type="text" id="time32" class="border-b px-1 w-20 text-sm"> น.</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="radio" name="errorType" value="3.3" class="text-blue-600">
+                        <span>3.3 CT ชำรุด เฟส <input type="text" id="phase33" class="border-b px-1 w-12 text-sm"> เวลา <input type="text" id="time33" class="border-b px-1 w-20 text-sm"> น.</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="border-t pt-4">
+                <label class="block text-sm font-medium mb-1">4. สถานที่ / บริเวณใกล้เคียง</label>
+                <input type="text" id="location" class="w-full p-2 border rounded-lg" placeholder="จุดสังเกต / สถานใกล้เคียง">
+            </div>
+
+            <div class="border-t pt-4">
+                <label class="block text-sm font-medium mb-1">ชื่อพนักงานผู้รายงาน (พชง.)</label>
+                <input type="text" id="officerName" class="w-full p-2 border rounded-lg" placeholder="ชื่อ-นามสกุล พชง.">
+            </div>
+
+            <button type="button" onclick="generatePDF()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition shadow-lg mt-6">
+                🖨️ สร้างและดาวน์โหลด PDF ลงฟอร์มจริง
+            </button>
+        </form>
+    </div>
+
+    <script>
+        async function generatePDF() {
+            const { PDFDocument, rgb } = PDFLib;
+
+            // โหลดไฟล์ PDF ต้นฉบับ (วางไฟล์ชื่อ template.pdf ไว้ในโฟลเดอร์เดียวกันบน GitHub)
+            try {
+                const existingPdfBytes = await fetch('template.pdf').then(res => res.arrayBuffer());
+                const pdfDoc = await PDFDocument.load(existingPdfBytes);
+                const pages = pdfDoc.getPages();
+                const firstPage = pages[0];
+
+                // ดึงค่าจากฟอร์มหน้าเว็บมาใส่ตัวแปร
+                const docNo = document.getElementById('docNo').value;
+                const docDate = document.getElementById('docDate').value;
+                const cusName = document.getElementById('cusName').value;
+                const cusNo = document.getElementById('cusNo').value;
+                const address = document.getElementById('address').value;
+                const moo = document.getElementById('moo').value;
+                const phone = document.getElementById('phone').value;
+                const meterSize = document.getElementById('meterSize').value;
+                const peaNo = document.getElementById('peaNo').value;
+                const location = document.getElementById('location').value;
+                const officerName = document.getElementById('officerName').value;
+
+                // พิกัด X, Y (หน่วยเป็นพอยต์ วัดจากมุมล่างซ้ายของกระดาษ) 
+                // *หมายเหตุ: ตัวเลขพิกัดด้านล่างนี้เป็นค่าตัวอย่าง ต้องเอาไปปรับจูนให้ตรงกับช่องใน template.pdf จริงอีกครั้งครับ*
+                firstPage.drawText(docNo, { x: 450, y: 730, size: 10, rgb: rgb(0, 0, 0) });
+                firstPage.drawText(docDate, { x: 430, y: 700, size: 10, rgb: rgb(0, 0, 0) });
+                
+                firstPage.drawText(cusName, { x: 130, y: 620, size: 10, rgb: rgb(0, 0, 0) });
+                firstPage.drawText(address, { x: 300, y: 620, size: 10, rgb: rgb(0, 0, 0) });
+                firstPage.drawText(moo, { x: 450, y: 620, size: 10, rgb: rgb(0, 0, 0) });
+                firstPage.drawText(phone, { x: 130, y: 595, size: 10, rgb: rgb(0, 0, 0) });
+                firstPage.drawText(cusNo, { x: 400, y: 595, size: 10, rgb: rgb(0, 0, 0) });
+
+                firstPage.drawText(meterSize, { x: 120, y: 565, size: 10, rgb: rgb(0, 0, 0) });
+                firstPage.drawText(peaNo, { x: 260, y: 565, size: 10, rgb: rgb(0, 0, 0) });
+
+                firstPage.drawText(location, { x: 150, y: 460, size: 10, rgb: rgb(0, 0, 0) });
+                firstPage.drawText(officerName, { x: 200, y: 340, size: 10, rgb: rgb(0, 0, 0) });
+
+                // เซฟไฟล์และดาวน์โหลดอัตโนมัติ
+                const pdfBytes = await pdfDoc.save();
+                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'รายงานมิเตอร์ผิดปกติ-พิมพ์แล้ว.pdf';
+                link.click();
+
+            } catch (error) {
+                alert("ไม่พบไฟล์ template.pdf กรุณาอัปโหลดไฟล์ต้นฉบับตั้งชื่อว่า template.pdf ไว้ใน GitHub โฟลเดอร์เดียวกันครับ");
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
